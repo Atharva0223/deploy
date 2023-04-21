@@ -47,12 +47,6 @@
     "independent": {
       "type": "boolean",
       "default": true
-    },
-    "followings": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::following.following",
-      "mappedBy": "organization"
     }
   }
 }
