@@ -18,13 +18,8 @@
         "completed",
         "ongoing",
         "waiting"
-      ]
-    },
-    "start_date": {
-      "type": "date"
-    },
-    "end_date": {
-      "type": "date"
+      ],
+      "default": "waiting"
     },
     "user": {
       "type": "relation",
@@ -37,6 +32,10 @@
       "relation": "manyToOne",
       "target": "api::opportunity.opportunity",
       "inversedBy": "opportunity_statuses"
+    },
+    "approved": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

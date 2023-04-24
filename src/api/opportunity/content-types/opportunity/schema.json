@@ -207,7 +207,7 @@
     "long": {
       "type": "float"
     },
-    "isDeleted": {
+    "is_deleted": {
       "type": "boolean",
       "default": false
     },

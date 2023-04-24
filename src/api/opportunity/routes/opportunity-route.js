@@ -98,8 +98,8 @@ module.exports = {
       //apply Opportunity
       // {
       //   method: "GET",
-      //   path: "/applyOpportunity",
-      //   handler: "opportunity-controller.applyOpportunity",
+      //   path: "/apply",
+      //   handler: "opportunity-controller.apply",
       //   config: {
       //     policies: [],
       //     middleware: [],
