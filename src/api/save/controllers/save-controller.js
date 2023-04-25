@@ -1,11 +1,10 @@
-const { connect } = require("../../../../config/pg");
+const client = require("../../../../config/pg");
 
 module.exports = {
   //dashboard
   //This will unsave an opportunities
   async unsave(ctx) {
     try {
-      const client = await connect();
       const query = `
       DELETE FROM saves s
       USING saves_opportunity_links sol, saves_user_links sul
@@ -23,7 +22,6 @@ module.exports = {
   //This will fetch all the saved opportunities of a user
   async saved(ctx) {
     try {
-      const client = await connect();
       const query = `
       SELECT
       org_logo.url AS "Organization logo",

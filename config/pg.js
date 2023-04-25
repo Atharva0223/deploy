@@ -30,6 +30,8 @@ async function connect() {
   }
 }
 
+// Call the connect function here itself
+connect();
 
 async function disconnect() {
   try {
@@ -40,4 +42,5 @@ async function disconnect() {
   }
 }
 
+// Export client to use client.query in controllers
 module.exports = { client, connect, disconnect };

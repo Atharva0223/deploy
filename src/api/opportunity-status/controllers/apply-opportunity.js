@@ -1,4 +1,4 @@
-const { connect } = require("../../../../config/pg");
+const client = require("../../../../config/pg");
 
 module.exports = {
 //Here the user will be able to seeall the applied opportunities

@@ -1,8 +1,9 @@
+const client = require("../../../../config/pg");
+
 module.exports = {
     //fetching all the posts
     async delete(ctx) {
       try {
-        const client = await connect();
         const query = `
         SELECT 
         org_logo.url AS "Organization logo",

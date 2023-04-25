@@ -1,11 +1,10 @@
-const { connect } = require("../../../../config/pg");
+const client = require("../../../../config/pg");
 
 module.exports = {
   //dashboard
   //This will fetch all the new opportunities on dashboard
   async find(ctx) {
     try {
-      const client = await connect();
       const query = `
       SELECT 
       org_logo.url AS "Organization logo",
@@ -56,7 +55,6 @@ module.exports = {
   //fetching responsibilities and skills of an individual opportunity
   async findOpportunity(ctx) {
     try {
-      const client = await connect();
       const query = `
       SELECT 
       org_logo.url AS "Organization logo",
@@ -104,7 +102,6 @@ module.exports = {
   //displaying facilities, terms and support of an individual opportunity
   async findOpportunityDetails(ctx) {
     try {
-      const client = await connect();
       const query = `
       SELECT
       opp_image.url AS "Opportunity image",
@@ -149,7 +146,6 @@ module.exports = {
   //View all ongoing and waiting opportunities
   async viewOngoing(ctx) {
     try {
-      const client = await connect();
       const query = `
       SELECT
       org_logo.url AS "Organization logo",
@@ -207,7 +203,6 @@ module.exports = {
   //View all completed opportunities
   async viewCompleted(ctx) {
     try {
-      const client = await connect();
       const query = `
       SELECT
       org_logo.url AS "Organization logo",
@@ -266,7 +261,6 @@ module.exports = {
   //This will fetch all the new opportunities on splash screen (top 5)
   async findTopFive(ctx) {
     try {
-      const client = await connect();
       const query = `
       SELECT 
       org_logo.url AS "Organization logo",
@@ -319,7 +313,6 @@ module.exports = {
   //This will fetch all the ongoing and waiting opportunities on splash screen (top 5)
   async findTopFiveOngoing(ctx) {
     try {
-      const client = await connect();
       const query = `
       SELECT
       org_logo.url AS "Organization logo",
@@ -378,7 +371,6 @@ module.exports = {
   //This will fetch all the completed opportunities on splash screen (top 5)
   async findTopFiveCompleted(ctx) {
     try {
-      const client = await connect();
       const query = `
       SELECT
       org_logo.url AS "Organization logo",
@@ -437,7 +429,6 @@ module.exports = {
   //deleting an opportunity
   async delete(ctx) {
     try {
-      const client = await connect();
       const query = `
       UPDATE
         opportunities

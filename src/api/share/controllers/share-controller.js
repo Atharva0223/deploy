@@ -1,11 +1,10 @@
-const { connect } = require("../../../../config/pg");
+const client = require("../../../../config/pg");
 
 module.exports = {
   //dashboard
   //This will update the count of shares by user
   async share(ctx) {
     try {
-      const client = await connect();
       const query = `
       UPDATE shares
       SET count = count + 1
