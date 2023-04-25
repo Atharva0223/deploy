@@ -11,7 +11,7 @@ module.exports = {
       SET count = count + 1
       FROM shares_user_links
       WHERE shares.id = shares_user_links.share_id
-      AND user_id = 1;
+      AND user_id = $1;
     `;
 
       const data = await client.query(query,[ctx.params.id]);

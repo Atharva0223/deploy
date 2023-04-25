@@ -94,16 +94,5 @@ module.exports = {
           middleware: [],
         },
       },
-//--------------------------------------------------------------------------------------
-      //apply Opportunity
-      // {
-      //   method: "GET",
-      //   path: "/applyOpportunity",
-      //   handler: "opportunity-controller.applyOpportunity",
-      //   config: {
-      //     policies: [],
-      //     middleware: [],
-      //   },
-      // },
     ],
   };

@@ -66,12 +66,6 @@
       "inversedBy": "users",
       "configurable": false
     },
-    "opportunity_statuses": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::opportunity-status.opportunity-status",
-      "mappedBy": "user"
-    },
     "saves": {
       "type": "relation",
       "relation": "oneToMany",
@@ -83,12 +77,6 @@
       "relation": "oneToMany",
       "target": "api::share.share",
       "mappedBy": "user"
-    },
-    "followings": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::following.following",
-      "mappedBy": "people"
     }
   }
 }

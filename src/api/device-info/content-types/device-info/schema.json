@@ -4,10 +4,11 @@
   "info": {
     "singularName": "device-info",
     "pluralName": "device-infos",
-    "displayName": "Device Info"
+    "displayName": "Device Info",
+    "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {

@@ -8,35 +8,28 @@
     "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
     "status": {
       "type": "enumeration",
       "enum": [
-        "completed",
+        "waiting",
         "ongoing",
-        "waiting"
-      ]
+        "completed"
+      ],
+      "default": "waiting"
     },
-    "start_date": {
-      "type": "date"
-    },
-    "end_date": {
-      "type": "date"
+    "approved": {
+      "type": "boolean",
+      "default": false
     },
     "user": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "opportunity_statuses"
+      "type": "integer"
     },
     "opportunity": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::opportunity.opportunity",
-      "inversedBy": "opportunity_statuses"
+      "type": "integer"
     }
   }
 }
