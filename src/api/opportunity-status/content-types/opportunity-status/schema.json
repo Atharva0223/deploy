@@ -8,34 +8,28 @@
     "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
     "status": {
       "type": "enumeration",
       "enum": [
-        "completed",
+        "waiting",
         "ongoing",
-        "waiting"
+        "completed"
       ],
       "default": "waiting"
-    },
-    "user": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "opportunity_statuses"
-    },
-    "opportunity": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::opportunity.opportunity",
-      "inversedBy": "opportunity_statuses"
     },
     "approved": {
       "type": "boolean",
       "default": false
+    },
+    "user": {
+      "type": "integer"
+    },
+    "opportunity": {
+      "type": "integer"
     }
   }
 }

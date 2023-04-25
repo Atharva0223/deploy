@@ -39,9 +39,9 @@ module.exports = {
       opp.profile,
       opp.city,
       opp_image.url,
-      opp.published_at
+      opp.created_at
       ORDER BY
-      opp.published_at DESC
+      opp.created_at DESC
     `;
 
       const data = await client.query(query);
@@ -86,9 +86,9 @@ module.exports = {
       opp_image.url,
       opp.responsibilities,
       opp.skills,
-      opp.published_at
+      opp.created_at
       ORDER BY
-      opp.published_at DESC;
+      opp.created_at DESC;
     `;
 
       const data = await client.query(query, [ctx.params.id]);
@@ -131,9 +131,9 @@ module.exports = {
       opp.facilities,
       opp.support,
       opp.terms,
-      opp.published_at
+      opp.created_at
       ORDER BY
-      opp.published_at DESC;
+      opp.created_at DESC;
         `;
 
       const data = await client.query(query, [ctx.params.id]);
@@ -189,9 +189,9 @@ module.exports = {
       opp.profile,
       opp.city,
       opp_image.url,
-      opp.published_at
+      opp.created_at
       ORDER BY
-      opp.published_at DESC;
+      opp.created_at DESC;
       `;
 
       const data = await client.query(query, [ctx.params.id]);
@@ -247,9 +247,9 @@ module.exports = {
       opp.profile,
       opp.city,
       opp_image.url,
-      opp.published_at
+      opp.created_at
       ORDER BY
-      opp.published_at DESC;
+      opp.created_at DESC;
       `;
 
       const data = await client.query(query, [ctx.params.id]);
@@ -300,9 +300,9 @@ module.exports = {
       opp.profile,
       opp.city,
       opp_image.url,
-      opp.published_at
+      opp.created_at
       ORDER BY
-      opp.published_at DESC
+      opp.created_at DESC
       LIMIT
       5
     `;
@@ -359,9 +359,9 @@ module.exports = {
       opp.profile,
       opp.city,
       opp_image.url,
-      opp.published_at
+      opp.created_at
       ORDER BY
-      opp.published_at DESC
+      opp.created_at DESC
       LIMIT
       5
     `;
@@ -418,9 +418,9 @@ module.exports = {
       opp.profile,
       opp.city,
       opp_image.url,
-      opp.published_at
+      opp.created_at
       ORDER BY
-      opp.published_at DESC
+      opp.created_at DESC
       LIMIT
       5
     `;
@@ -452,22 +452,4 @@ module.exports = {
       console.log(error);
     }
   },
-
-  //Here the user will be able to apply to opportunities
-  // async applyOpportunity(ctx) {
-  //   try {
-  //     const client = await connect();
-  //     const query = `
-      
-  //   `;
-
-  //     const data = await client.query(query, [ctx.params.id]);
-
-  //     ctx.send({
-  //       data: data.rows,
-  //     });
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // },
 };
