@@ -345,12 +345,10 @@ module.exports = {
       LEFT JOIN files org_logo ON frm_logo.file_id = org_logo.id
       LEFT JOIN files_related_morphs frm_image ON frm_image.related_id = opp.id AND frm_image.field = 'image'
       LEFT JOIN files opp_image ON frm_image.file_id = opp_image.id
-      LEFT JOIN opportunity_statuses_opportunity_links osol ON opp.id = osol.opportunity_id
-      LEFT JOIN opportunity_statuses os ON os.id = osol.opportunity_status_id
-      LEFT JOIN opportunity_statuses_user_links osul ON os.id = osul.opportunity_status_id
-      LEFT JOIN up_users uu ON uu.id = osul.user_id
+      LEFT JOIN opportunity_statuses os ON opp.id = os.opportunity
+      LEFT JOIN up_users uu ON uu.id = os.user
       WHERE
-      uu.id = 1 AND os.status = 'ongoing' OR os.status = 'waiting' AND opp.is_deleted = false
+      uu.id = $1 AND os.status = 'ongoing' OR os.status = 'waiting' AND opp.is_deleted = false
       GROUP BY
       org.id,
       org_logo.url,
@@ -405,12 +403,10 @@ module.exports = {
       LEFT JOIN files org_logo ON frm_logo.file_id = org_logo.id
       LEFT JOIN files_related_morphs frm_image ON frm_image.related_id = opp.id AND frm_image.field = 'image'
       LEFT JOIN files opp_image ON frm_image.file_id = opp_image.id
-      LEFT JOIN opportunity_statuses_opportunity_links osol ON opp.id = osol.opportunity_id
-      LEFT JOIN opportunity_statuses os ON os.id = osol.opportunity_status_id
-      LEFT JOIN opportunity_statuses_user_links osul ON os.id = osul.opportunity_status_id
-      LEFT JOIN up_users uu ON uu.id = osul.user_id
+      LEFT JOIN opportunity_statuses os ON opp.id = os.opportunity
+      LEFT JOIN up_users uu ON uu.id = os.user
       WHERE
-      uu.id = 1 AND os.status = 'completed' AND opp.is_deleted = false
+      uu.id = $1 AND os.status = 'completed' AND opp.is_deleted = false
       GROUP BY
       org.id,
       org_logo.url,
