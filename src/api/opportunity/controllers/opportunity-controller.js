@@ -7,6 +7,7 @@ module.exports = {
     try {
       const query = `
       SELECT 
+      org.id AS "organization ID",
       org_logo.url AS "Organization logo",
       COALESCE(org.name, '') AS "Organization name",
       COALESCE(opp.profile, '') AS "Opportunity profile",
@@ -30,6 +31,7 @@ module.exports = {
       WHERE
       opp.is_deleted = false
       GROUP BY 
+      org.id,
       org_logo.url,
       opp.months,
       opp.start_on,
@@ -57,6 +59,7 @@ module.exports = {
     try {
       const query = `
       SELECT 
+      org.id AS "organization ID",
       org_logo.url AS "Organization logo",
       COALESCE(org.name, '') AS "Organization name",
       COALESCE(opp.profile, '') AS "Opportunity profile",
@@ -78,6 +81,7 @@ module.exports = {
       WHERE
       opp.id = $1 AND opp.is_deleted = false
       GROUP BY 
+      org.id,
       org_logo.url,
       org.name,
       opp.profile,
@@ -104,6 +108,7 @@ module.exports = {
     try {
       const query = `
       SELECT
+      org.id AS "organization ID",
       opp_image.url AS "Opportunity image",
       org.name AS "Organization name",
       opp.profile AS "Opportunity profile",
@@ -122,6 +127,7 @@ module.exports = {
       WHERE
       opp.id = $1 AND opp.is_deleted = false
       GROUP BY 
+      org.id,
       opp_image.url,
       org.name,
       opp.profile,
@@ -148,6 +154,7 @@ module.exports = {
     try {
       const query = `
       SELECT
+      org.id,
       org_logo.url AS "Organization logo",
       COALESCE(org.name, '') AS "Organization name",
       os.status AS "Opportunity Status",
@@ -169,13 +176,12 @@ module.exports = {
       LEFT JOIN files org_logo ON frm_logo.file_id = org_logo.id
       LEFT JOIN files_related_morphs frm_image ON frm_image.related_id = opp.id AND frm_image.field = 'image'
       LEFT JOIN files opp_image ON frm_image.file_id = opp_image.id
-      LEFT JOIN opportunity_statuses_opportunity_links osol ON opp.id = osol.opportunity_id
-      LEFT JOIN opportunity_statuses os ON os.id = osol.opportunity_status_id
-      LEFT JOIN opportunity_statuses_user_links osul ON os.id = osul.opportunity_status_id
-      LEFT JOIN up_users uu ON uu.id = osul.user_id
+      LEFT JOIN opportunity_statuses os ON opp.id = os.opportunity
+      LEFT JOIN up_users uu ON uu.id = os.user
       WHERE
-      uu.id = $1 AND os.status = 'ongoing' OR os.status = 'waiting' AND opp.is_deleted = false 
+      uu.id = $1 AND os.status='waiting' OR os.status='ongoing' AND opp.is_deleted = false
       GROUP BY
+      org.id,
       org_logo.url,
       opp.months,
       os.status,
@@ -205,6 +211,7 @@ module.exports = {
     try {
       const query = `
       SELECT
+      org.id,
       org_logo.url AS "Organization logo",
       COALESCE(org.name, '') AS "Organization name",
       os.status AS "Opportunity Status",
@@ -226,13 +233,12 @@ module.exports = {
       LEFT JOIN files org_logo ON frm_logo.file_id = org_logo.id
       LEFT JOIN files_related_morphs frm_image ON frm_image.related_id = opp.id AND frm_image.field = 'image'
       LEFT JOIN files opp_image ON frm_image.file_id = opp_image.id
-      LEFT JOIN opportunity_statuses_opportunity_links osol ON opp.id = osol.opportunity_id
-      LEFT JOIN opportunity_statuses os ON os.id = osol.opportunity_status_id
-      LEFT JOIN opportunity_statuses_user_links osul ON os.id = osul.opportunity_status_id
-      LEFT JOIN up_users uu ON uu.id = osul.user_id
+      LEFT JOIN opportunity_statuses os ON opp.id = os.opportunity
+      LEFT JOIN up_users uu ON uu.id = os.user
       WHERE
-      uu.id = $1 AND os.status = 'completed' AND opp.is_deleted = false
+      uu.id = $1 AND os.status='completed' AND opp.is_deleted = false
       GROUP BY
+      org.id,
       org_logo.url,
       opp.months,
       os.status,
@@ -263,6 +269,7 @@ module.exports = {
     try {
       const query = `
       SELECT 
+      org.id AS "organization ID",
       org_logo.url AS "Organization logo",
       COALESCE(org.name, '') AS "Organization name",
       COALESCE(opp.profile, '') AS "Opportunity profile",
@@ -286,6 +293,7 @@ module.exports = {
       WHERE
       opp.is_deleted = false
       GROUP BY 
+      org.id,
       org_logo.url,
       opp.months,
       opp.start_on,
@@ -315,6 +323,7 @@ module.exports = {
     try {
       const query = `
       SELECT
+      org.id AS "organization ID",
       org_logo.url AS "Organization logo",
       COALESCE(org.name, '') AS "Organization name",
       os.status AS "Opportunity Status",
@@ -343,6 +352,7 @@ module.exports = {
       WHERE
       uu.id = 1 AND os.status = 'ongoing' OR os.status = 'waiting' AND opp.is_deleted = false
       GROUP BY
+      org.id,
       org_logo.url,
       opp.months,
       os.status,
@@ -373,6 +383,7 @@ module.exports = {
     try {
       const query = `
       SELECT
+      org.id AS "organization ID",
       org_logo.url AS "Organization logo",
       COALESCE(org.name, '') AS "Organization name",
       os.status AS "Opportunity Status",
@@ -401,6 +412,7 @@ module.exports = {
       WHERE
       uu.id = 1 AND os.status = 'completed' AND opp.is_deleted = false
       GROUP BY
+      org.id,
       org_logo.url,
       opp.months,
       os.status,

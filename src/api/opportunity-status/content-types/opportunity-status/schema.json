@@ -30,6 +30,10 @@
     },
     "opportunity": {
       "type": "integer"
+    },
+    "is_deleted": {
+      "type": "boolean",
+      "default": false
     }
   }
 }
