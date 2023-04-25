@@ -1,4 +1,4 @@
-const client = require("../../../../config/pg");
+const {client} = require("../../../../config/pg");
 
 module.exports = {
   //dashboard
@@ -7,15 +7,16 @@ module.exports = {
     try {
       const query = `
       SELECT 
-      org.id AS "organization ID",
+      opp.id AS "Opportunity ID",
+      org.id AS "Organization ID",
       org_logo.url AS "Organization logo",
       COALESCE(org.name, '') AS "Organization name",
       COALESCE(opp.profile, '') AS "Opportunity profile",
       COALESCE(opp.city, '') AS "City",
       COALESCE(opp_image.url, '') AS "Opportunity image",
       COALESCE(opp.months) AS "Duration",
-      COALESCE(opp.start_on) AS "Start Date",
-      COALESCE(opp.end_on) AS "End Date",
+      TO_CHAR(COALESCE(opp.start_on),'DD Mon YYYY') AS "Start Date",
+      TO_CHAR(COALESCE(opp.end_on),'DD Mon YYYY') AS "End Date",
       COALESCE(ROUND(AVG(r.value), 1), 0) AS "Rating"
       FROM 
       opportunities opp
@@ -31,6 +32,7 @@ module.exports = {
       WHERE
       opp.is_deleted = false
       GROUP BY 
+      opp.id,
       org.id,
       org_logo.url,
       opp.months,
@@ -59,7 +61,8 @@ module.exports = {
     try {
       const query = `
       SELECT 
-      org.id AS "organization ID",
+      opp.id AS "Opportunity ID",
+      org.id AS "Organization ID",
       org_logo.url AS "Organization logo",
       COALESCE(org.name, '') AS "Organization name",
       COALESCE(opp.profile, '') AS "Opportunity profile",
@@ -81,6 +84,7 @@ module.exports = {
       WHERE
       opp.id = $1 AND opp.is_deleted = false
       GROUP BY 
+      opp.id,
       org.id,
       org_logo.url,
       org.name,
@@ -108,7 +112,8 @@ module.exports = {
     try {
       const query = `
       SELECT
-      org.id AS "organization ID",
+      opp.id AS "Opportunity ID",
+      org.id AS "Organization ID",
       opp_image.url AS "Opportunity image",
       org.name AS "Organization name",
       opp.profile AS "Opportunity profile",
@@ -127,6 +132,7 @@ module.exports = {
       WHERE
       opp.id = $1 AND opp.is_deleted = false
       GROUP BY 
+      opp.id,
       org.id,
       opp_image.url,
       org.name,
@@ -154,7 +160,8 @@ module.exports = {
     try {
       const query = `
       SELECT
-      org.id,
+      opp.id AS "Opportunity ID",
+      org.id AS "Organization ID",
       org_logo.url AS "Organization logo",
       COALESCE(org.name, '') AS "Organization name",
       os.status AS "Opportunity Status",
@@ -162,8 +169,8 @@ module.exports = {
       COALESCE(opp.city, '') AS "City",
       COALESCE(opp_image.url, '') AS "Opportunity image",
       COALESCE(opp.months) AS "Duration",
-      COALESCE(opp.start_on) AS "Start Date",
-      COALESCE(opp.end_on) AS "End Date",
+      TO_CHAR(COALESCE(opp.start_on),'DD Mon YYYY') AS "Start Date",
+      TO_CHAR(COALESCE(opp.end_on),'DD Mon YYYY') AS "End Date",
       COALESCE(ROUND(AVG(r.value), 1), 0) AS "Rating"
       FROM 
       opportunities opp
@@ -181,6 +188,7 @@ module.exports = {
       WHERE
       uu.id = $1 AND os.status='waiting' OR os.status='ongoing' AND opp.is_deleted = false
       GROUP BY
+      opp.id,
       org.id,
       org_logo.url,
       opp.months,
@@ -211,7 +219,8 @@ module.exports = {
     try {
       const query = `
       SELECT
-      org.id,
+      opp.id AS "Opportunity ID",
+      org.id AS "Organization ID",
       org_logo.url AS "Organization logo",
       COALESCE(org.name, '') AS "Organization name",
       os.status AS "Opportunity Status",
@@ -219,8 +228,8 @@ module.exports = {
       COALESCE(opp.city, '') AS "City",
       COALESCE(opp_image.url, '') AS "Opportunity image",
       COALESCE(opp.months) AS "Duration",
-      COALESCE(opp.start_on) AS "Start Date",
-      COALESCE(opp.end_on) AS "End Date",
+      TO_CHAR(COALESCE(opp.start_on),'DD Mon YYYY') AS "Start Date",
+      TO_CHAR(COALESCE(opp.end_on),'DD Mon YYYY') AS "End Date",,
       COALESCE(ROUND(AVG(r.value), 1), 0) AS "Rating"
       FROM 
       opportunities opp
@@ -238,6 +247,7 @@ module.exports = {
       WHERE
       uu.id = $1 AND os.status='completed' AND opp.is_deleted = false
       GROUP BY
+      opp.id,
       org.id,
       org_logo.url,
       opp.months,
@@ -269,15 +279,16 @@ module.exports = {
     try {
       const query = `
       SELECT 
-      org.id AS "organization ID",
+      opp.id AS "Opportunity ID",
+      org.id AS "Organization ID",
       org_logo.url AS "Organization logo",
       COALESCE(org.name, '') AS "Organization name",
       COALESCE(opp.profile, '') AS "Opportunity profile",
       COALESCE(opp.city, '') AS "City",
       COALESCE(opp_image.url, '') AS "Opportunity image",
       COALESCE(opp.months) AS "Duration",
-      COALESCE(opp.start_on) AS "Start Date",
-      COALESCE(opp.end_on) AS "End Date",
+      TO_CHAR(COALESCE(opp.start_on),'DD Mon YYYY') AS "Start Date",
+      TO_CHAR(COALESCE(opp.end_on),'DD Mon YYYY') AS "End Date",
       COALESCE(ROUND(AVG(r.value), 1), 0) AS "Rating"
       FROM 
       opportunities opp
@@ -293,6 +304,7 @@ module.exports = {
       WHERE
       opp.is_deleted = false
       GROUP BY 
+      opp.id,
       org.id,
       org_logo.url,
       opp.months,
@@ -323,7 +335,8 @@ module.exports = {
     try {
       const query = `
       SELECT
-      org.id AS "organization ID",
+      opp.id AS "Opportunity ID",
+      org.id AS "Organization ID",
       org_logo.url AS "Organization logo",
       COALESCE(org.name, '') AS "Organization name",
       os.status AS "Opportunity Status",
@@ -331,8 +344,8 @@ module.exports = {
       COALESCE(opp.city, '') AS "City",
       COALESCE(opp_image.url, '') AS "Opportunity image",
       COALESCE(opp.months) AS "Duration",
-      COALESCE(opp.start_on) AS "Start Date",
-      COALESCE(opp.end_on) AS "End Date",
+      TO_CHAR(COALESCE(opp.start_on),'DD Mon YYYY') AS "Start Date",
+      TO_CHAR(COALESCE(opp.end_on),'DD Mon YYYY') AS "End Date",
       COALESCE(ROUND(AVG(r.value), 1), 0) AS "Rating"
       FROM 
       opportunities opp
@@ -350,6 +363,7 @@ module.exports = {
       WHERE
       uu.id = $1 AND os.status = 'ongoing' OR os.status = 'waiting' AND opp.is_deleted = false
       GROUP BY
+      opp.id,
       org.id,
       org_logo.url,
       opp.months,
@@ -381,7 +395,8 @@ module.exports = {
     try {
       const query = `
       SELECT
-      org.id AS "organization ID",
+      opp.id AS "Opportunity ID",
+      org.id AS "Organization ID",
       org_logo.url AS "Organization logo",
       COALESCE(org.name, '') AS "Organization name",
       os.status AS "Opportunity Status",
@@ -389,8 +404,8 @@ module.exports = {
       COALESCE(opp.city, '') AS "City",
       COALESCE(opp_image.url, '') AS "Opportunity image",
       COALESCE(opp.months) AS "Duration",
-      COALESCE(opp.start_on) AS "Start Date",
-      COALESCE(opp.end_on) AS "End Date",
+      TO_CHAR(COALESCE(opp.start_on),'DD Mon YYYY') AS "Start Date",
+      TO_CHAR(COALESCE(opp.end_on),'DD Mon YYYY') AS "End Date",
       COALESCE(ROUND(AVG(r.value), 1), 0) AS "Rating"
       FROM 
       opportunities opp
@@ -408,6 +423,7 @@ module.exports = {
       WHERE
       uu.id = $1 AND os.status = 'completed' AND opp.is_deleted = false
       GROUP BY
+      opp.id,
       org.id,
       org_logo.url,
       opp.months,

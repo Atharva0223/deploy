@@ -1,4 +1,4 @@
-const client = require("../../../../config/pg");
+const {client} = require("../../../../config/pg");
 
 module.exports = {
   //dashboard
