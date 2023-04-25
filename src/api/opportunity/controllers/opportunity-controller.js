@@ -2,6 +2,7 @@ const {client} = require("../../../../config/pg");
 
 module.exports = {
   //dashboard
+  //NEW OPPORTUNITIES
   //This will fetch all the new opportunities on dashboard
   async find(ctx) {
     try {
@@ -15,9 +16,14 @@ module.exports = {
       COALESCE(opp.city, '') AS "City",
       COALESCE(opp_image.url, '') AS "Opportunity image",
       COALESCE(opp.months) AS "Duration",
+      org.website AS "Website",
       TO_CHAR(COALESCE(opp.start_on),'DD Mon YYYY') AS "Start Date",
       TO_CHAR(COALESCE(opp.end_on),'DD Mon YYYY') AS "End Date",
-      COALESCE(ROUND(AVG(r.value), 1), 0) AS "Rating"
+      COALESCE(ROUND(AVG(r.value), 1), 0) AS "Rating",
+      sul.user_id AS "User ID",
+      os.approved AS "Approval status",
+      os.status AS "Opportunity Status",
+      s.save AS "Save Status"
       FROM 
       opportunities opp
       LEFT JOIN opportunities_organization_links ool ON opp.id = ool.opportunity_id
@@ -29,19 +35,28 @@ module.exports = {
       LEFT JOIN files org_logo ON frm_logo.file_id = org_logo.id
       LEFT JOIN files_related_morphs frm_image ON frm_image.related_id = opp.id AND frm_image.field = 'image'
       LEFT JOIN files opp_image ON frm_image.file_id = opp_image.id
+      LEFT JOIN opportunity_statuses os ON os.opportunity = opp.id
+      LEFT JOIN saves_opportunity_links sol ON sol.opportunity_id = opp.id
+      LEFT JOIN saves s ON sol.save_id = s.id
+      LEFT JOIN saves_user_links sul ON sul.save_id = s.id
       WHERE
       opp.is_deleted = false
       GROUP BY 
+      sul.user_id,
       opp.id,
       org.id,
       org_logo.url,
       opp.months,
+      org.website,
       opp.start_on,
       opp.end_on,
       org.name,
       opp.profile,
       opp.city,
       opp_image.url,
+      os.status,
+      os.approved,
+      s.save,
       opp.created_at
       ORDER BY
       opp.created_at DESC
@@ -68,8 +83,7 @@ module.exports = {
       COALESCE(opp.profile, '') AS "Opportunity profile",
       COALESCE(opp_image.url, '') AS "Opportunity image",
       COALESCE(opp.responsibilities, '') AS "Responsibilities",
-      COALESCE(opp.skills, '') AS "Skills",
-      ARRAY_AGG(t.tag) AS Tags
+      COALESCE(opp.skills, '') AS "Skills"
       FROM 
       opportunities opp
       LEFT JOIN opportunities_organization_links ool ON opp.id = ool.opportunity_id
@@ -80,7 +94,6 @@ module.exports = {
       LEFT JOIN files_related_morphs frm_image ON frm_image.related_id = opp.id AND frm_image.field = 'image'
       LEFT JOIN files opp_image ON frm_image.file_id = opp_image.id
       LEFT JOIN opportunities_tags_links otl ON otl.opportunity_id = opp.id
-      LEFT JOIN tags t ON otl.tag_id = t.id
       WHERE
       opp.id = $1 AND opp.is_deleted = false
       GROUP BY 
@@ -155,6 +168,7 @@ module.exports = {
     }
   },
 
+  //ONGOING?WAITING TASKS
   //View all ongoing and waiting opportunities
   async viewOngoing(ctx) {
     try {
@@ -164,14 +178,17 @@ module.exports = {
       org.id AS "Organization ID",
       org_logo.url AS "Organization logo",
       COALESCE(org.name, '') AS "Organization name",
-      os.status AS "Opportunity Status",
       COALESCE(opp.profile, '') AS "Opportunity profile",
       COALESCE(opp.city, '') AS "City",
       COALESCE(opp_image.url, '') AS "Opportunity image",
       COALESCE(opp.months) AS "Duration",
+      org.website AS "Website",
       TO_CHAR(COALESCE(opp.start_on),'DD Mon YYYY') AS "Start Date",
       TO_CHAR(COALESCE(opp.end_on),'DD Mon YYYY') AS "End Date",
-      COALESCE(ROUND(AVG(r.value), 1), 0) AS "Rating"
+      COALESCE(ROUND(AVG(r.value), 1), 0) AS "Rating",
+      os.status AS "Opportunity Status",
+      os.approved AS "Approval status",
+      s.save AS "Save Status"
       FROM 
       opportunities opp
       LEFT JOIN opportunities_organization_links ool ON opp.id = ool.opportunity_id
@@ -185,20 +202,26 @@ module.exports = {
       LEFT JOIN files opp_image ON frm_image.file_id = opp_image.id
       LEFT JOIN opportunity_statuses os ON opp.id = os.opportunity
       LEFT JOIN up_users uu ON uu.id = os.user
+      LEFT JOIN saves_opportunity_links sol ON sol.opportunity_id = opp.id
+      LEFT JOIN saves s ON sol.save_id = s.id
+      LEFT JOIN saves_user_links sul ON sul.save_id = s.id
       WHERE
-      uu.id = $1 AND os.status='waiting' OR os.status='ongoing' AND opp.is_deleted = false
+      uu.id=$1 AND (os.status='waiting' OR os.status='ongoing') AND opp.is_deleted=false
       GROUP BY
       opp.id,
       org.id,
       org_logo.url,
       opp.months,
-      os.status,
+      org.website,
       opp.start_on,
       opp.end_on,
       org.name,
       opp.profile,
       opp.city,
       opp_image.url,
+      os.status,
+      os.approved,
+      s.save,
       opp.created_at
       ORDER BY
       opp.created_at DESC;
@@ -223,14 +246,17 @@ module.exports = {
       org.id AS "Organization ID",
       org_logo.url AS "Organization logo",
       COALESCE(org.name, '') AS "Organization name",
-      os.status AS "Opportunity Status",
       COALESCE(opp.profile, '') AS "Opportunity profile",
       COALESCE(opp.city, '') AS "City",
       COALESCE(opp_image.url, '') AS "Opportunity image",
       COALESCE(opp.months) AS "Duration",
+      org.website AS "Website",
       TO_CHAR(COALESCE(opp.start_on),'DD Mon YYYY') AS "Start Date",
-      TO_CHAR(COALESCE(opp.end_on),'DD Mon YYYY') AS "End Date",,
-      COALESCE(ROUND(AVG(r.value), 1), 0) AS "Rating"
+      TO_CHAR(COALESCE(opp.end_on),'DD Mon YYYY') AS "End Date",
+      COALESCE(ROUND(AVG(r.value), 1), 0) AS "Rating",
+      os.status AS "Opportunity Status",
+      os.approved AS "Approval status",
+      s.save AS "Save Status"
       FROM 
       opportunities opp
       LEFT JOIN opportunities_organization_links ool ON opp.id = ool.opportunity_id
@@ -244,6 +270,9 @@ module.exports = {
       LEFT JOIN files opp_image ON frm_image.file_id = opp_image.id
       LEFT JOIN opportunity_statuses os ON opp.id = os.opportunity
       LEFT JOIN up_users uu ON uu.id = os.user
+      LEFT JOIN saves_opportunity_links sol ON sol.opportunity_id = opp.id
+      LEFT JOIN saves s ON sol.save_id = s.id
+      LEFT JOIN saves_user_links sul ON sul.save_id = s.id
       WHERE
       uu.id = $1 AND os.status='completed' AND opp.is_deleted = false
       GROUP BY
@@ -251,13 +280,16 @@ module.exports = {
       org.id,
       org_logo.url,
       opp.months,
-      os.status,
+      org.website,
       opp.start_on,
       opp.end_on,
       org.name,
       opp.profile,
       opp.city,
       opp_image.url,
+      os.status,
+      os.approved,
+      s.save,
       opp.created_at
       ORDER BY
       opp.created_at DESC;
@@ -287,9 +319,13 @@ module.exports = {
       COALESCE(opp.city, '') AS "City",
       COALESCE(opp_image.url, '') AS "Opportunity image",
       COALESCE(opp.months) AS "Duration",
+      org.website AS "Website",
       TO_CHAR(COALESCE(opp.start_on),'DD Mon YYYY') AS "Start Date",
       TO_CHAR(COALESCE(opp.end_on),'DD Mon YYYY') AS "End Date",
-      COALESCE(ROUND(AVG(r.value), 1), 0) AS "Rating"
+      COALESCE(ROUND(AVG(r.value), 1), 0) AS "Rating",
+      os.status AS "Opportunity Status",
+      os.approved AS "Approval status",
+      s.save AS "Save Status"
       FROM 
       opportunities opp
       LEFT JOIN opportunities_organization_links ool ON opp.id = ool.opportunity_id
@@ -301,6 +337,9 @@ module.exports = {
       LEFT JOIN files org_logo ON frm_logo.file_id = org_logo.id
       LEFT JOIN files_related_morphs frm_image ON frm_image.related_id = opp.id AND frm_image.field = 'image'
       LEFT JOIN files opp_image ON frm_image.file_id = opp_image.id
+      LEFT JOIN saves_opportunity_links sol ON sol.opportunity_id = opp.id
+      LEFT JOIN saves s ON sol.save_id = s.id
+      LEFT JOIN saves_user_links sul ON sul.save_id = s.id
       WHERE
       opp.is_deleted = false
       GROUP BY 
@@ -308,12 +347,16 @@ module.exports = {
       org.id,
       org_logo.url,
       opp.months,
+      org.website,
       opp.start_on,
       opp.end_on,
       org.name,
       opp.profile,
       opp.city,
       opp_image.url,
+      os.status,
+      os.approved,
+      s.save,
       opp.created_at
       ORDER BY
       opp.created_at DESC
@@ -344,9 +387,13 @@ module.exports = {
       COALESCE(opp.city, '') AS "City",
       COALESCE(opp_image.url, '') AS "Opportunity image",
       COALESCE(opp.months) AS "Duration",
+      org.website AS "Website",
       TO_CHAR(COALESCE(opp.start_on),'DD Mon YYYY') AS "Start Date",
       TO_CHAR(COALESCE(opp.end_on),'DD Mon YYYY') AS "End Date",
-      COALESCE(ROUND(AVG(r.value), 1), 0) AS "Rating"
+      COALESCE(ROUND(AVG(r.value), 1), 0) AS "Rating",
+      os.status AS "Opportunity Status",
+      os.approved AS "Approval status",
+      s.save AS "Save Status"
       FROM 
       opportunities opp
       LEFT JOIN opportunities_organization_links ool ON opp.id = ool.opportunity_id
@@ -360,6 +407,9 @@ module.exports = {
       LEFT JOIN files opp_image ON frm_image.file_id = opp_image.id
       LEFT JOIN opportunity_statuses os ON opp.id = os.opportunity
       LEFT JOIN up_users uu ON uu.id = os.user
+      LEFT JOIN saves_opportunity_links sol ON sol.opportunity_id = opp.id
+      LEFT JOIN saves s ON sol.save_id = s.id
+      LEFT JOIN saves_user_links sul ON sul.save_id = s.id
       WHERE
       uu.id = $1 AND os.status = 'ongoing' OR os.status = 'waiting' AND opp.is_deleted = false
       GROUP BY
@@ -368,12 +418,16 @@ module.exports = {
       org_logo.url,
       opp.months,
       os.status,
+      org.website,
       opp.start_on,
       opp.end_on,
       org.name,
       opp.profile,
       opp.city,
       opp_image.url,
+      os.status,
+      os.approved,
+      s.save,
       opp.created_at
       ORDER BY
       opp.created_at DESC
@@ -404,9 +458,13 @@ module.exports = {
       COALESCE(opp.city, '') AS "City",
       COALESCE(opp_image.url, '') AS "Opportunity image",
       COALESCE(opp.months) AS "Duration",
+      org.website AS "Website",
       TO_CHAR(COALESCE(opp.start_on),'DD Mon YYYY') AS "Start Date",
       TO_CHAR(COALESCE(opp.end_on),'DD Mon YYYY') AS "End Date",
-      COALESCE(ROUND(AVG(r.value), 1), 0) AS "Rating"
+      COALESCE(ROUND(AVG(r.value), 1), 0) AS "Rating",
+      os.status AS "Opportunity Status",
+      os.approved AS "Approval status",
+      s.save AS "Save Status"
       FROM 
       opportunities opp
       LEFT JOIN opportunities_organization_links ool ON opp.id = ool.opportunity_id
@@ -420,6 +478,9 @@ module.exports = {
       LEFT JOIN files opp_image ON frm_image.file_id = opp_image.id
       LEFT JOIN opportunity_statuses os ON opp.id = os.opportunity
       LEFT JOIN up_users uu ON uu.id = os.user
+      LEFT JOIN saves_opportunity_links sol ON sol.opportunity_id = opp.id
+      LEFT JOIN saves s ON sol.save_id = s.id
+      LEFT JOIN saves_user_links sul ON sul.save_id = s.id
       WHERE
       uu.id = $1 AND os.status = 'completed' AND opp.is_deleted = false
       GROUP BY
@@ -428,12 +489,16 @@ module.exports = {
       org_logo.url,
       opp.months,
       os.status,
+      org.website,
       opp.start_on,
       opp.end_on,
       org.name,
       opp.profile,
       opp.city,
       opp_image.url,
+      os.status,
+      os.approved,
+      s.save,
       opp.created_at
       ORDER BY
       opp.created_at DESC

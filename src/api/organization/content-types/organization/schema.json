@@ -47,6 +47,9 @@
     "independent": {
       "type": "boolean",
       "default": true
+    },
+    "website": {
+      "type": "string"
     }
   }
 }

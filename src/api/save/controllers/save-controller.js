@@ -9,7 +9,7 @@ module.exports = {
       DELETE FROM saves s
       USING saves_opportunity_links sol, saves_user_links sul
       WHERE s.id = sol.save_id AND sul.save_id = s.id AND
-      s.is_deleted = false AND sol.id = $1;
+      s.save = true AND sol.id = $1;
     `;
 
       const data = await client.query(query,[ctx.params.id]);
@@ -48,7 +48,7 @@ module.exports = {
       LEFT JOIN files_related_morphs frm_image ON frm_image.related_id = opp.id AND frm_image.field = 'image'
       LEFT JOIN files opp_image ON frm_image.file_id = opp_image.id
       WHERE
-      s.is_deleted = false AND sul.user_id = $1
+      s.save = true AND sul.user_id = $1
       GROUP BY
       sul.user_id,
       s.save,

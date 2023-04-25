@@ -27,10 +27,6 @@
       "relation": "manyToOne",
       "target": "api::opportunity.opportunity",
       "inversedBy": "saves"
-    },
-    "isDeleted": {
-      "type": "boolean",
-      "default": false
     }
   }
 }

@@ -9,21 +9,12 @@
     "select": {
       "type": "enumeration",
       "enum": [
-        "website",
         "social",
         "cin"
       ]
     },
     "link": {
       "type": "string"
-    },
-    "document": {
-      "type": "media",
-      "multiple": false,
-      "required": false,
-      "allowedTypes": [
-        "images"
-      ]
     }
   }
 }
