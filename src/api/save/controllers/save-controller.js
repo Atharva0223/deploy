@@ -1,24 +1,6 @@
 const {client} = require("../../../../config/pg");
 
 module.exports = {
-  //dashboard
-  //This will unsave an opportunities
-  async unsave(ctx) {
-    try {
-      const query = `
-      DELETE FROM saves s
-      USING saves_opportunity_links sol, saves_user_links sul
-      WHERE s.id = sol.save_id AND sul.save_id = s.id AND
-      s.save = true AND sol.id = $1;
-    `;
-
-      const data = await client.query(query,[ctx.params.id]);
-      ctx.send("post unsaved");
-    } catch (error) {
-      console.log(error);
-    }
-  },
-
   //This will fetch all the saved opportunities of a user
   async saved(ctx) {
     try {
@@ -71,4 +53,27 @@ module.exports = {
       console.log(error);
     }
   },
+
+  //This will unsave a post
+  async unsave(ctx) {
+    try {
+      const query = `
+      Delete from saves where id = (
+      SELECT
+      s.id
+      FROM saves s
+      LEFT JOIN saves_opportunity_links sol ON s.id = sol.save_id
+      LEFT JOIN saves_user_links sul ON s.id = sul.save_id
+      WHERE sol.opportunity_id = $1 AND sul.user_id = $2)
+    `;
+
+      const data = await client.query(query, [ctx.params.id1,ctx.params.id2]);
+      ctx.send({
+        data: data.rows,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
 };

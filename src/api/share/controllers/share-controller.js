@@ -14,7 +14,9 @@ module.exports = {
     `;
 
       const data = await client.query(query,[ctx.params.id]);
-      ctx.send("post shared");
+      ctx.send({
+        "response": "Data shared"
+      });
     } catch (error) {
       console.log(error);
     }

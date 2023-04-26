@@ -168,7 +168,7 @@ module.exports = {
     }
   },
 
-  //ONGOING?WAITING TASKS
+  //ONGOING AND WAITING TASKS
   //View all ongoing and waiting opportunities
   async viewOngoing(ctx) {
     try {
@@ -206,7 +206,7 @@ module.exports = {
       LEFT JOIN saves s ON sol.save_id = s.id
       LEFT JOIN saves_user_links sul ON sul.save_id = s.id
       WHERE
-      uu.id=$1 AND (os.status='waiting' OR os.status='ongoing') AND opp.is_deleted=false
+      uu.id=$1 AND os.status='ongoing' AND opp.is_deleted=false
       GROUP BY
       opp.id,
       org.id,
@@ -340,8 +340,9 @@ module.exports = {
       LEFT JOIN saves_opportunity_links sol ON sol.opportunity_id = opp.id
       LEFT JOIN saves s ON sol.save_id = s.id
       LEFT JOIN saves_user_links sul ON sul.save_id = s.id
+      LEFT JOIN opportunity_statuses os ON opp.id = os.opportunity
       WHERE
-      opp.is_deleted = false
+      opp.is_deleted = false AND os.user = $1
       GROUP BY 
       opp.id,
       org.id,
@@ -364,7 +365,7 @@ module.exports = {
       5
     `;
 
-      const data = await client.query(query);
+      const data = await client.query(query,[ctx.params.id]);
       ctx.send({
         data: data.rows,
       });
@@ -411,7 +412,7 @@ module.exports = {
       LEFT JOIN saves s ON sol.save_id = s.id
       LEFT JOIN saves_user_links sul ON sul.save_id = s.id
       WHERE
-      uu.id = $1 AND os.status = 'ongoing' OR os.status = 'waiting' AND opp.is_deleted = false
+      uu.id = $1 AND os.status = 'ongoing' AND opp.is_deleted = false
       GROUP BY
       opp.id,
       org.id,
@@ -435,7 +436,7 @@ module.exports = {
       5
     `;
 
-      const data = await client.query(query);
+      const data = await client.query(query,[ctx.params.id]);
       ctx.send({
         data: data.rows,
       });
@@ -506,7 +507,7 @@ module.exports = {
       5
     `;
 
-      const data = await client.query(query);
+      const data = await client.query(query,[ctx.params.id]);
       ctx.send({
         data: data.rows,
       });
