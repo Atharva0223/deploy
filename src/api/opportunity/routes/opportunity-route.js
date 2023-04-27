@@ -14,7 +14,7 @@ module.exports = {
       //find by id
       {
         method: "GET",
-        path: "/findOpportunity/:id",
+        path: "/findOpportunity/:id1/:id2",
         handler: "opportunity-controller.findOpportunity",
         config: {
           policies: [],

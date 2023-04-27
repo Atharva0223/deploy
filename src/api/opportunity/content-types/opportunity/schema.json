@@ -119,14 +119,6 @@
       "type": "date",
       "required": true
     },
-    "duration": {
-      "type": "string",
-      "required": true
-    },
-    "months": {
-      "type": "string",
-      "required": true
-    },
     "responsibilities": {
       "type": "text",
       "required": true
