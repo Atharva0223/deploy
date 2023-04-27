@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * organization router
+ * rating router
  */
 
 const { createCoreRouter } = require('@strapi/strapi').factories;

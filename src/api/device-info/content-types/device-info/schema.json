@@ -41,6 +41,9 @@
     },
     "modelName": {
       "type": "string"
+    },
+    "device_token": {
+      "type": "string"
     }
   }
 }

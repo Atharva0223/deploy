@@ -24,9 +24,14 @@ async function connect() {
     console.error("Error connecting:", error);
     // Reconnect if there was an error connecting
     console.log("Reconnecting...");
-    await client.connect();
-    console.log("Reconnected successfully");
-    return client;
+    try {
+      await client.connect();
+      console.log("Reconnected successfully");
+      return client;
+    } catch (error) {
+      console.error("Error reconnecting:", error);
+      throw error;
+    }
   }
 }
 
@@ -39,6 +44,7 @@ async function disconnect() {
     console.log("Disconnected successfully");
   } catch (error) {
     console.error("Error disconnecting:", error);
+    throw error;
   }
 }
 
