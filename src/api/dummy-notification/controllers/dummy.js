@@ -6,6 +6,7 @@ module.exports = {
     //This will fetch all the new opportunities on dashboard
     async notificationFind(ctx) {
       try {
+        
         const query = `
         SELECT
         f.url,
