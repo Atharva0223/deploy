@@ -66,7 +66,7 @@ module.exports = {
       LEFT JOIN saves_user_links sul ON s.id = sul.save_id
       WHERE sol.opportunity_id = $1 AND sul.user_id = $2)
     `;
-
+//                                            opportunity id  user id
       const data = await client.query(query, [ctx.params.id1,ctx.params.id2]);
       ctx.send({
         data: data.rows,

@@ -52,50 +52,6 @@
       "type": "string",
       "required": true
     },
-    "state": {
-      "type": "customField",
-      "options": [
-        "Remote",
-        "Andhra Pradesh",
-        "Arunachal Pradesh",
-        "Assam",
-        "Bihar",
-        "Chhattisgarh",
-        "Goa",
-        "Gujarat",
-        "Haryana",
-        "Himachal Pradesh",
-        "Jharkhand",
-        "Karnataka",
-        "Kerala",
-        "Madhya Pradesh",
-        "Maharashtra",
-        "Manipur",
-        "Meghalaya",
-        "Mizoram",
-        "Nagaland",
-        "Odisha",
-        "Punjab",
-        "Rajasthan",
-        "Sikkim",
-        "Tamil Nadu",
-        "Telangana",
-        "Tripura",
-        "Uttar Pradesh",
-        "Uttarakhand",
-        "West Bengal",
-        "Andaman and Nicobar Islands",
-        "Chandigarh",
-        "Dadra and Nagar Haveli and Daman and Diu",
-        "Lakshadweep",
-        "Delhi",
-        "Puducherry",
-        "Jammu and Kashmir",
-        "Ladakh"
-      ],
-      "customField": "plugin::multi-select.multi-select",
-      "required": true
-    },
     "part_time": {
       "type": "boolean",
       "required": true
@@ -202,6 +158,12 @@
       "relation": "oneToMany",
       "target": "api::save.save",
       "mappedBy": "opportunity"
+    },
+    "states": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::state.state",
+      "mappedBy": "opportunities"
     }
   }
 }
