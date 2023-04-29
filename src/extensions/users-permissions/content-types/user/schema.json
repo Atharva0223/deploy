@@ -72,11 +72,20 @@
       "target": "api::share.share",
       "mappedBy": "user"
     },
+    "first_name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
     "filters": {
       "type": "relation",
-      "relation": "manyToMany",
+      "relation": "oneToMany",
       "target": "api::filter.filter",
-      "mappedBy": "users"
+      "mappedBy": "user"
     }
   }
 }

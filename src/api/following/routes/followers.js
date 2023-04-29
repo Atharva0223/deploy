@@ -19,5 +19,14 @@ module.exports = {
           middleware: [],
         },
       },
+      {
+        method: "POST",
+        path: "/followOrganization",
+        handler: "followers.followOrganization",
+        config: {
+          policies: [],
+          middleware: [],
+        },
+      },
     ]
 };

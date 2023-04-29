@@ -4,16 +4,17 @@
   "info": {
     "singularName": "filter",
     "pluralName": "filters",
-    "displayName": "Filter"
+    "displayName": "Filter",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
-    "users": {
+    "user": {
       "type": "relation",
-      "relation": "manyToMany",
+      "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
       "inversedBy": "filters"
     },
@@ -21,6 +22,12 @@
       "type": "relation",
       "relation": "manyToMany",
       "target": "api::state.state",
+      "inversedBy": "filters"
+    },
+    "tags": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::tag.tag",
       "inversedBy": "filters"
     }
   }
