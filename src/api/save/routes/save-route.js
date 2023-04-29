@@ -19,5 +19,14 @@ module.exports = {
           middleware: [],
         },
       },
+      {
+        method: "POST",
+        path: "/save/:id1/:id2",
+        handler: "save-controller.save",
+        config: {
+          policies: [],
+          middleware: [],
+        },
+      },
     ]
 }

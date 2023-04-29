@@ -16,17 +16,11 @@
       "type": "boolean",
       "default": true
     },
-    "user": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "saves"
-    },
     "opportunity": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::opportunity.opportunity",
-      "inversedBy": "saves"
+      "type": "integer"
+    },
+    "users": {
+      "type": "integer"
     }
   }
 }

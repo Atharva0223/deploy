@@ -72,11 +72,11 @@
       "target": "api::share.share",
       "mappedBy": "user"
     },
-    "saves": {
+    "filters": {
       "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::save.save",
-      "mappedBy": "user"
+      "relation": "manyToMany",
+      "target": "api::filter.filter",
+      "mappedBy": "users"
     }
   }
 }

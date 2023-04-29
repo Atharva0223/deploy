@@ -153,12 +153,6 @@
       "type": "boolean",
       "default": false
     },
-    "saves": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::save.save",
-      "mappedBy": "opportunity"
-    },
     "states": {
       "type": "relation",
       "relation": "manyToMany",

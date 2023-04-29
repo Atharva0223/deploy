@@ -10,5 +10,14 @@ module.exports = {
           middleware: [],
         },
       },
+      {
+        method: "POST",
+        path: "/followPerson",
+        handler: "followers.followPerson",
+        config: {
+          policies: [],
+          middleware: [],
+        },
+      },
     ]
 };
