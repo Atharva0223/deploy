@@ -16,7 +16,7 @@ module.exports = {
       COALESCE(opp.skills, '') AS "Skills",
       opp.start_on AS "Start On",
       opp.end_on AS "End On",
-      CASE WHEN f.user = $2 AND f.organization = org.id THEN true ELSE false END AS "Following"
+      CASE WHEN f.users = $2 AND f.organization = org.id THEN true ELSE false END AS "Following"
       FROM 
       opportunities opp
       LEFT JOIN opportunities_organization_links ool ON opp.id = ool.opportunity_id
@@ -31,20 +31,15 @@ module.exports = {
       WHERE
       opp.id = $1 AND opp.is_deleted = false
       GROUP BY
-      f.organization,
-      f.user,
       opp.id,
       org.id,
       org_logo.url,
-      org.name,
-      opp.profile,
       opp_image.url,
-      opp.responsibilities,
-      opp.skills,
-      opp.created_at
+      f.users,
+      f.organization
       ORDER BY
       opp.created_at DESC;
-    `;
+      `
       //                                      opp.id          user.id
       const data = await client.query(query, [ctx.params.id1,ctx.params.id2]);
 

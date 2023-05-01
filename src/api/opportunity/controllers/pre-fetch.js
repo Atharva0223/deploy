@@ -33,9 +33,7 @@ module.exports = {
       LEFT JOIN files org_logo ON frm_logo.file_id = org_logo.id
       LEFT JOIN files_related_morphs frm_image ON frm_image.related_id = opp.id AND frm_image.field = 'image'
       LEFT JOIN files opp_image ON frm_image.file_id = opp_image.id
-      LEFT JOIN saves_opportunity_links sol ON sol.opportunity_id = opp.id
-      LEFT JOIN saves s ON sol.save_id = s.id
-      LEFT JOIN saves_user_links sul ON sul.save_id = s.id
+      LEFT JOIN saves s ON opp.id = s.opportunity
       LEFT JOIN opportunity_statuses os ON opp.id = os.opportunity
       WHERE
       opp.is_deleted = false AND os.user = $1
@@ -99,9 +97,7 @@ module.exports = {
       LEFT JOIN files opp_image ON frm_image.file_id = opp_image.id
       LEFT JOIN opportunity_statuses os ON opp.id = os.opportunity
       LEFT JOIN up_users uu ON uu.id = os.user
-      LEFT JOIN saves_opportunity_links sol ON sol.opportunity_id = opp.id
-      LEFT JOIN saves s ON sol.save_id = s.id
-      LEFT JOIN saves_user_links sul ON sul.save_id = s.id
+      LEFT JOIN saves s ON opp.id = s.opportunity
       WHERE
       uu.id = $1 AND os.status = 'ongoing' AND opp.is_deleted = false
       GROUP BY
@@ -165,9 +161,7 @@ module.exports = {
       LEFT JOIN files opp_image ON frm_image.file_id = opp_image.id
       LEFT JOIN opportunity_statuses os ON opp.id = os.opportunity
       LEFT JOIN up_users uu ON uu.id = os.user
-      LEFT JOIN saves_opportunity_links sol ON sol.opportunity_id = opp.id
-      LEFT JOIN saves s ON sol.save_id = s.id
-      LEFT JOIN saves_user_links sul ON sul.save_id = s.id
+      LEFT JOIN saves s ON opp.id = s.opportunity
       WHERE
       uu.id = $1 AND os.status = 'completed' AND opp.is_deleted = false
       GROUP BY
