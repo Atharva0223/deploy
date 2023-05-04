@@ -1,7 +1,7 @@
 const { client } = require("../../../../config/pg");
 
 module.exports = {
-  //deleting an opportunity
+  //Finding opportunities using filters
   async find(ctx) {
     try {
       const query = `

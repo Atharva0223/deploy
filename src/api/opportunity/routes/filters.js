@@ -1,7 +1,6 @@
 module.exports = {
     routes: [
-      //dashboard fetch
-      //find all the opportunities
+      //find all the opportunities by filter
       {
         method: "GET",
         path: "/findByFilter",
