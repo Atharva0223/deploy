@@ -28,5 +28,14 @@ module.exports = {
           middleware: [],
         },
       },
+      {
+        method: "DELETE",
+        path: "/unfollowPerson",
+        handler: "followers.unfollowPerson",
+        config: {
+          policies: [],
+          middleware: [],
+        },
+      },
     ]
 };

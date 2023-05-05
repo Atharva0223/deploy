@@ -27,38 +27,31 @@
     "image": {
       "type": "media",
       "multiple": false,
-      "required": false,
       "allowedTypes": [
         "images"
       ]
     },
     "profile": {
-      "type": "string",
-      "required": true
+      "type": "string"
     },
     "skills": {
-      "type": "string",
-      "required": true
+      "type": "string"
     },
     "opportunity_type": {
       "type": "enumeration",
       "enum": [
         "internship",
         "volunteer"
-      ],
-      "required": true
+      ]
     },
     "city": {
-      "type": "string",
-      "required": true
+      "type": "string"
     },
     "part_time": {
-      "type": "boolean",
-      "required": true
+      "type": "boolean"
     },
     "openings": {
-      "type": "integer",
-      "required": true
+      "type": "integer"
     },
     "start": {
       "type": "enumeration",
@@ -68,16 +61,13 @@
       ]
     },
     "start_on": {
-      "type": "date",
-      "required": true
+      "type": "date"
     },
     "end_on": {
-      "type": "date",
-      "required": true
+      "type": "date"
     },
     "responsibilities": {
-      "type": "text",
-      "required": true
+      "type": "text"
     },
     "stipend_type": {
       "type": "enumeration",
@@ -89,48 +79,38 @@
       ]
     },
     "currency": {
-      "type": "string",
-      "required": true
+      "type": "string"
     },
     "stipend_value": {
-      "type": "decimal",
-      "required": true
+      "type": "decimal"
     },
     "payment_type": {
-      "type": "string",
-      "required": true
+      "type": "string"
     },
     "perks": {
-      "type": "text",
-      "required": true
+      "type": "text"
     },
     "ppo": {
-      "type": "boolean",
-      "required": true
+      "type": "boolean"
     },
     "cover_letter": {
       "type": "media",
       "multiple": false,
-      "required": false,
       "allowedTypes": [
         "files"
       ]
     },
     "assessment_questions": {
-      "type": "text",
-      "required": true
+      "type": "text"
     },
     "facilities": {
-      "type": "text",
-      "required": true
+      "type": "text"
     },
     "support": {
-      "type": "text",
-      "required": true
+      "type": "text"
     },
     "terms": {
-      "type": "text",
-      "required": true
+      "type": "text"
     },
     "tags": {
       "type": "relation",

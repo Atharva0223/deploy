@@ -21,8 +21,8 @@ module.exports = {
     },
     {
       method: "POST",
-      path: "/addStatesFilter",
-      handler: "custom.addStatesFilter",
+      path: "/addFilters",
+      handler: "custom.addFilters",
       config: {
         policies: [],
         middleware: [],

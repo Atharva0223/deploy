@@ -107,6 +107,7 @@ coverage
 ############################
 
 .env
+yourPrivateKeyFile.json
 license.txt
 exports
 *.cache

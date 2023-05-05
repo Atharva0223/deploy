@@ -37,9 +37,10 @@ module.exports = {
     }
   },
   //store states for a user
-  async addStatesFilter(ctx) {
+  async addFilters(ctx) {
     try {
-      const query = `
+      //GET IDS of states
+      const stateQuery = `
         SELECT
           s.id
         FROM
@@ -48,7 +49,7 @@ module.exports = {
           s.state = ANY ($1)
         ORDER BY s.id
       `;
-      const data = await client.query(query, [ctx.request.body.states]);
+      const data = await client.query(stateQuery, [ctx.request.body.states]);
       console.log("Data received: ", data.rows);
 
       const ids = data.rows.map((rows) => rows.id);
@@ -59,9 +60,7 @@ module.exports = {
 
       const entry = await strapi.entityService.create('api::filter.filter', {
         data: {
-          users: {
-            connect: [userID]
-          },
+          user: [userID],
           states: ids
         },
       });

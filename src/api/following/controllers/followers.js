@@ -87,4 +87,40 @@ async followOrganization(ctx) {
     console.log(error);
   }
 },
+
+//follow a person
+async unfollowPerson(ctx) {
+  try {
+    const{users,people} = ctx.request.body;
+    console.log(ctx.request.body);
+    const query = `
+    DELETE FROM
+    followings
+    WHERE
+    users = $1 AND people = $2
+  `;
+    const data = await client.query(query,[users,people]);
+    if(data.rows.length<=0){
+      const query = `
+      DELETE FROM
+      followings
+      WHERE
+      users = $1 AND people = $2;
+      `;
+
+      const data = await client.query(query,[users,people]);
+
+      ctx.send({
+        message: "Unfollowed"
+      })
+    }
+    else if (data.rows.length<=0){
+      ctx.send({
+        message: "Already unfollowed this person"
+      })
+    }
+  } catch (error) {
+    console.log(error);
+  }
+},
 }

@@ -13,15 +13,5 @@ module.exports = ({ env }) => ({
         delete: {},
       },
     },
-  },
-  "generate-data": {
-    enabled: true,
-},
-'strapi-plugin-fcm': {
-  enabled: true,
-  resolve: './src/plugins/strapi-plugin-fcm', // path to plugin folder
-  options: {
-      apiKey: env('FCM_API_KEY'), // Your FCM API Key
-    },
-},
+  }
 });

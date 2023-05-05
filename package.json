@@ -18,11 +18,7 @@
     "@strapi/strapi": "4.9.1",
     "axios": "^1.4.0",
     "better-sqlite3": "8.0.1",
-    "firebase-admin": "^11.7.0",
     "pg": "^8.10.0",
-    "strapi-plugin-fcm": "^1.0.6",
-    "strapi-plugin-generate-data": "^1.0.22",
-    "strapi-plugin-multi-select": "^1.1.0",
     "twilio": "^4.10.0"
   },
   "author": {

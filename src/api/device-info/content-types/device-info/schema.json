@@ -30,16 +30,16 @@
     "appVersion": {
       "type": "string"
     },
-    "deviceTimezone": {
-      "type": "time"
-    },
-    "deviceCurrentTimestamp": {
-      "type": "time"
-    },
     "token": {
       "type": "string"
     },
     "modelName": {
+      "type": "string"
+    },
+    "deviceCurrentTimestamp": {
+      "type": "datetime"
+    },
+    "deviceTimezone": {
       "type": "string"
     }
   }
