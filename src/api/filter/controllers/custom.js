@@ -49,23 +49,44 @@ module.exports = {
           s.state = ANY ($1)
         ORDER BY s.id
       `;
-      const data = await client.query(stateQuery, [ctx.request.body.states]);
-      console.log("Data received: ", data.rows);
+      //get states data
+      const statedata = await client.query(stateQuery, [ctx.request.body.states]);
+      //get states ids
+      const stateids = statedata.rows.map((rows) => rows.id);
 
-      const ids = data.rows.map((rows) => rows.id);
-      console.log("ids of states: ", ids);
-      
+      //---------------------------------------------------------
+
+      //GET IDs of tags
+      const tagsQuery = `
+        SELECT
+          t.id
+        FROM
+          tags t
+        WHERE
+          t.tag = ANY ($1)
+        ORDER BY t.id
+      `;
+      //get tags data
+      const tagdata = await client.query(tagsQuery, [ctx.request.body.tags]);
+      //get tags ids
+      const tagids = tagdata.rows.map((rows) => rows.id);
+
+      //----------------------------------------------------------------------
+
       const userID = parseInt(ctx.request.body.users);
-      console.log("type of userID ", typeof(userID),"value of userID ", userID);
 
       const entry = await strapi.entityService.create('api::filter.filter', {
         data: {
           user: [userID],
-          states: ids
+          states: stateids,
+          tags: tagids
         },
       });
       console.log(entry);
       
+      ctx.send({
+        message: "Filters added successfully"
+      })
       
     } catch (error) {
       console.log(error);

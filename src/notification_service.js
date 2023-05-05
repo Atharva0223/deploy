@@ -16,6 +16,8 @@ module.exports = {
           title: `New opportunity posted "${data.profile}"`,
           body: `Opportunity type "${data.opportunity_type}" and this opportunity is in "${data.city}"`,
           android_channel_id: "Vishvmitraapp",
+          //TODO: ADD OPPORTUNITY ID to the notification
+          // data: {"id": }
         },
         to: row.token,
       }));
