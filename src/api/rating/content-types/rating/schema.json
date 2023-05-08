@@ -4,7 +4,7 @@
   "info": {
     "singularName": "rating",
     "pluralName": "ratings",
-    "displayName": "Rating",
+    "displayName": "Opportunity Rating",
     "description": ""
   },
   "options": {
@@ -20,6 +20,9 @@
       "relation": "manyToOne",
       "target": "api::opportunity.opportunity",
       "inversedBy": "ratings"
+    },
+    "users": {
+      "type": "string"
     }
   }
 }
