@@ -10,5 +10,14 @@ module.exports = {
           middleware: [],
         },
       },
+      {
+        method: "DELETE",
+        path: "/unapply/:oid/:uid",
+        handler: "apply-opportunity.unapply",
+        config: {
+          policies: [],
+          middleware: [],
+        },
+      },
     ]
 };

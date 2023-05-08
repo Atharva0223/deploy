@@ -1,7 +1,7 @@
-const {client} = require("../../../../config/pg");
+const { client } = require("../../../../config/pg");
 
 module.exports = {
-//Here the user will be able to seeall the applied opportunities
+  //Here the user will be able to seeall the applied opportunities
   async getApply(ctx) {
     try {
       const query = `
@@ -23,4 +23,35 @@ module.exports = {
       console.log(error);
     }
   },
-}
+  async unapply(ctx) {
+    try {
+      const exists = await strapi.query('api::opportunity-status.opportunity-status').findOne({
+        where: {
+          opportunity: ctx.params.oid,
+          user: ctx.params.uid
+        }
+      });
+      if(exists){
+        const del = await strapi.query('api::opportunity-status.opportunity-status').delete({
+          where: {
+            opportunity: ctx.params.oid,
+            user: ctx.params.uid
+          }
+        });
+        ctx.send({
+          message: "You have cancelled the application"
+        })
+      } else if(!exists){
+        ctx.send({
+          message: "ERROR! You have either cancelled the application alrady or not applied yet"
+        })
+      }
+
+      
+
+      
+    } catch (error) {
+      console.log(error);
+    }
+  },
+};
