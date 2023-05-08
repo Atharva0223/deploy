@@ -4,7 +4,7 @@ const FCM_API_KEY = process.env.FCM_API_KEY;
 const fcmEndpoint = process.env.fcmEndpoint; //fcm api endpoint
 
 module.exports = {
-  sendNotification: async (data) => {
+  sendNotification: async (notification) => {
     // Send notification to all users
     const dtoken = `SELECT token FROM device_infos;`; //get all tokens
     const getToken = await client.query(dtoken); //store them in getToken
@@ -13,14 +13,26 @@ module.exports = {
       .filter((row) => row.token)
       .map((row) => ({
         notification: {
-          title: `New opportunity posted "${data.profile}"`,
-          body: `Opportunity type "${data.opportunity_type}" and this opportunity is in "${data.city}"`,
+          image: notification.image,
+          title: notification.title,
+          body: notification.body,
           android_channel_id: "Vishvmitraapp",
-          //TODO: ADD OPPORTUNITY ID to the notification
-          // data: {"id": }
+          data: notification.data
         },
         to: row.token,
       }));
+
+      const enter =  await strapi.entityService.create('api::store-notification.store-notification',{
+        data:{
+          image: notification.image,
+          title: notification.title,
+          body: notification.body,
+          type: notification.data.type,
+          nid: notification.data.nid,
+          isRead: false
+        }
+      });
+      console.log("Data entered in api::store-notification.store-notification", enter);
 
     const requestOptions = {
       method: "POST",
@@ -34,7 +46,7 @@ module.exports = {
       fetch(fcmEndpoint, {
         ...requestOptions,
         body: JSON.stringify(notification),
-      }).then((response) => {
+      }).then(async (response) => {
         if (response.ok) {
           console.log("Notification sent successfully");
         } else {

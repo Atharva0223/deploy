@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "login_sessions",
+  "info": {
+    "singularName": "login-session",
+    "pluralName": "login-sessions",
+    "displayName": "Login Session"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "jwt_token": {
+      "type": "string"
+    },
+    "device_id": {
+      "type": "string"
+    },
+    "token": {
+      "type": "string"
+    },
+    "status": {
+      "type": "boolean"
+    }
+  }
+}

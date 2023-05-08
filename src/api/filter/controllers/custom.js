@@ -1,5 +1,5 @@
 const { client } = require("../../../../config/pg");
-const https = require('https');
+const https = require("https");
 
 module.exports = {
   //get all states
@@ -50,7 +50,9 @@ module.exports = {
         ORDER BY s.id
       `;
       //get states data
-      const statedata = await client.query(stateQuery, [ctx.request.body.states]);
+      const statedata = await client.query(stateQuery, [
+        ctx.request.body.states,
+      ]);
       //get states ids
       const stateids = statedata.rows.map((rows) => rows.id);
 
@@ -75,19 +77,42 @@ module.exports = {
 
       const userID = parseInt(ctx.request.body.users);
 
-      const entry = await strapi.entityService.create('api::filter.filter', {
-        data: {
-          user: [userID],
-          states: stateids,
-          tags: tagids
-        },
+      const filter = await strapi.query("api::filter.filter").findOne({
+        users: userID,
       });
-      console.log(entry);
-      
-      ctx.send({
-        message: "Filters added successfully"
-      })
-      
+
+      if (filter) {
+        console.log("Updating users filters");
+        const entry = await strapi.entityService.update(
+          "api::filter.filter",
+          filter.id,
+          {
+            data: {
+              user: [userID],
+              states: stateids,
+              tags: tagids,
+            },
+          }
+        );
+        ctx.send({
+          message: "Filters updated successfully",
+        });
+      } else {
+        console.log("Adding users and its filters");
+        const newFilter = await strapi.entityService.create(
+          "api::filter.filter",
+          {
+            data: {
+              user: [userID],
+              states: stateids,
+              tags: tagids,
+            },
+          }
+        );
+        ctx.send({
+          message: "Filters added successfully",
+        });
+      }
     } catch (error) {
       console.log(error);
     }

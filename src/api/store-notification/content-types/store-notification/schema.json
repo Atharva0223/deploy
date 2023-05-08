@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "store_notifications",
+  "info": {
+    "singularName": "store-notification",
+    "pluralName": "store-notifications",
+    "displayName": "Store Notification",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "body": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    },
+    "image": {
+      "type": "string"
+    },
+    "nid": {
+      "type": "biginteger"
+    },
+    "isRead": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}
