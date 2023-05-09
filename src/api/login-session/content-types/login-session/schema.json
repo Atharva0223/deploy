@@ -4,10 +4,11 @@
   "info": {
     "singularName": "login-session",
     "pluralName": "login-sessions",
-    "displayName": "Login Session"
+    "displayName": "Login Session",
+    "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
@@ -17,11 +18,11 @@
     "device_id": {
       "type": "string"
     },
-    "token": {
-      "type": "string"
-    },
     "status": {
       "type": "boolean"
+    },
+    "users": {
+      "type": "string"
     }
   }
 }

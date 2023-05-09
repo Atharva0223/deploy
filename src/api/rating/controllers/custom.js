@@ -11,7 +11,7 @@ module.exports = {
         },
       });
 
-      if (exists) {
+      if (!exists) {
         const add = await strapi.query("api::rating.rating").create({
           users: data.users,
           value: data.value,
@@ -20,7 +20,7 @@ module.exports = {
         ctx.send({
           message: "Rating added successfully",
         });
-      } else if (!exists) {
+      } else if (exists) {
         const add = await strapi.query("api::rating.rating").update({
           where: {
             users: data.users,
