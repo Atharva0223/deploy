@@ -6,6 +6,7 @@ module.exports = {
     try {
       //Fetch first_name, last_name, phone, email from ctx.request.body
       const { first_name, last_name, phone, email } = ctx.request.body;
+      console.log(first_name, last_name, phone, email);
 
       //check if any value is empty
       if(!first_name || !last_name || !phone || !email){
