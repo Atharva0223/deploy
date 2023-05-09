@@ -10,5 +10,14 @@ module.exports = {
           middleware: [],
         },
       },
+      {
+        method: "GET",
+        path: "/getRating/:oid/:uid",
+        handler: "custom.getRating",
+        config: {
+          policies: [],
+          middleware: [],
+        },
+      },
     ]
 };

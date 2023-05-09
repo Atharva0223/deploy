@@ -4,18 +4,19 @@ module.exports = {
   //Here the user will be able to seeall the applied opportunities
   async rating(ctx) {
     try {
-      const data = ctx.request.body;
+      const { users, value, opportunity } = ctx.request.body.data;
+
       const exists = await strapi.query("api::rating.rating").findOne({
-        where: {
-          users: data.users,
-        },
+        where: { users, opportunity },
       });
 
       if (!exists) {
         const add = await strapi.query("api::rating.rating").create({
-          users: data.users,
-          value: data.value,
-          opportunity: data.opportunity,
+          data: {
+            users: users,
+            value: value,
+            opportunity: opportunity,
+          },
         });
         ctx.send({
           message: "Rating added successfully",
@@ -23,11 +24,11 @@ module.exports = {
       } else if (exists) {
         const add = await strapi.query("api::rating.rating").update({
           where: {
-            users: data.users,
+            users: users,
           },
           data: {
-            value: data.value,
-            opportunity: data.opportunity,
+            value: value,
+            opportunity: opportunity,
           },
         });
         ctx.send({
@@ -36,6 +37,27 @@ module.exports = {
       }
     } catch (error) {
       console.log(error);
+    }
+  },
+
+  async getRating(ctx) {
+    const { oid, uid } = ctx.request.params;
+
+    const exists = await strapi.query("api::rating.rating").findOne({
+      where: {
+        users: uid,
+        opportunity: oid,
+      },
+    });
+    if(exists){
+      ctx.send({
+        value: exists.value,
+      })
+    }
+    else if(!exists) {
+      ctx.send({
+        message: "Rating not found"
+      })
     }
   },
 };
