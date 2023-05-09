@@ -7,6 +7,16 @@ module.exports = {
       //Fetch first_name, last_name, phone, email from ctx.request.body
       const { first_name, last_name, phone, email } = ctx.request.body;
 
+      //check if any value is empty
+      if(!first_name || !last_name || !phone || !email){
+        ctx.send({
+          data:{
+            message: "All fields are required",
+            code: 2
+          }
+        })
+      }
+
       // check if the user exists with that email or phone number
       const exists = await strapi
         .query("plugin::users-permissions.user")
@@ -46,8 +56,9 @@ module.exports = {
           });
         // send response to let the user know that they have been registered
         ctx.send({
-          message: "Congratulations, you have successfully registered",
           data: {
+            message: "Congratulations, you have successfully registered",
+            code: 1,
             first_name: insert.first_name,
             last_name: insert.last_name,
             phone: insert.phone,
@@ -59,11 +70,21 @@ module.exports = {
       else if (exists) {
         // Return message Already registerd
         ctx.send({
-          message: "You have already registered",
+          data:{
+            message: "You have already registered",
+            code: 2
+          }
         });
       }
     } catch (error) {
-      ctx.send(error);
+      ctx.send({
+        data: {
+          message: "An error occurred",
+          code: 2,
+          error: error,
+
+        }
+      });
     }
   },
 };

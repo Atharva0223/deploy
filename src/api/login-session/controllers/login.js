@@ -61,12 +61,20 @@ module.exports = {
 
           //send mail
           sgMail.send(msg).catch((error) => {
-            ctx.send(error);
+            ctx.send({
+              data: {
+                error: error,
+                code: 2,
+              },
+            });
           });
 
           // Return message otp sent successfully
           ctx.send({
-            message: "OTP sent successfully",
+            data: {
+              message: "OTP sent successfully",
+              code: 1,
+            },
           });
         }
         //------------------------------------------------------------------------------------------------------------------------
@@ -82,16 +90,29 @@ module.exports = {
 
           // Return message otp sent successfully
           ctx.send({
-            message: "OTP sent sucessfully",
+            data: {
+              message: "OTP sent sucessfully",
+              code: 1,
+            },
           });
         }
       }
       // if user not found send error message user not found
       else if (!exists) {
-        ctx.send({ message: "User not found" });
+        ctx.send({
+          data: {
+            message: "User not found",
+            code: 2,
+          },
+        });
       }
     } catch (error) {
-      ctx.send(error);
+      ctx.send({
+        data: {
+          message: error,
+          code: 2,
+        },
+      });
     }
   },
 
@@ -154,9 +175,11 @@ module.exports = {
             });
         }
         // Return the JWT token in the response body
-        ctx.body = {
-          jwt: jwtToken,
+        ctx.send = {
           data: {
+            message: "Login Successful",
+            code: 1,
+            jwt: jwtToken,
             id: exists.id,
             first_name: exists.first_name,
             last_name: exists.last_name,
@@ -166,10 +189,20 @@ module.exports = {
       }
       //if not exists then send error message invalid otp
       else if (!exists) {
-        ctx.throw("Invalid OTP");
+        ctx.send({
+          data: {
+            message: "Invalid OTP",
+            code: 2,
+          },
+        });
       }
     } catch (error) {
-      ctx.send(error);
+      ctx.send({
+        data: {
+          message: error,
+          code: 2,
+        },
+      });
     }
   },
 };
