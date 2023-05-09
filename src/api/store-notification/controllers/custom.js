@@ -7,7 +7,7 @@ module.exports = {
       const ids = ctx.params.id;
       const isread = await strapi.query('api::store-notification.store-notification').update({
         where: {
-            id: ids
+            nid: ids
         },
         data: {
             isRead: true

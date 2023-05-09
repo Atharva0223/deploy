@@ -86,6 +86,9 @@
       "relation": "oneToMany",
       "target": "api::filter.filter",
       "mappedBy": "user"
+    },
+    "otp": {
+      "type": "integer"
     }
   }
 }

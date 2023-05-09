@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "upskills",
+  "info": {
+    "singularName": "upskill",
+    "pluralName": "upskills",
+    "displayName": "Upskill",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "profile": {
+      "type": "string"
+    },
+    "content": {
+      "type": "text"
+    },
+    "vm_image": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": true
+    },
+    "Org_name": {
+      "type": "string"
+    }
+  }
+}
