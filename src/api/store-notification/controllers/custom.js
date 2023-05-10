@@ -25,36 +25,40 @@ module.exports = {
 
   async findNotifications(ctx) {
     try {
-      const data = await strapi
+      const notifications = await strapi
         .query("api::store-notification.store-notification")
         .findMany();
 
-      for (let i = 0; i < data.length; i++) {
+        const data = [];
+
+      for (let i = 0; i < notifications.length; i++) {
         //store all the createdAt in dateTimeString
-        const dateTimeString = data[i].createdAt;
+        const dateTimeString = notifications[i].createdAt;
 
         const dateObj = new Date(dateTimeString);
 
         const timeDiffMs = new Date() - dateObj;
 
-        const timeDiffSec = Math.floor(timeDiffMs / 1000);
-        const timeDiffMin = Math.floor(timeDiffMs / 60000);
-        const timeDiffHrs = Math.floor(timeDiffMs / 3600000);
+        const postedAtSec = Math.floor(timeDiffMs / 1000);
+        const postedAtMin = Math.floor(timeDiffMs / 60000);
+        const postedAtHrs = Math.floor(timeDiffMs / 3600000);
 
-        ctx.send({
-          data:{
-            id: data[i].id,
-            title: data[i].title,
-            type: data[i].type,
-            image: data[i].image,
-            nid: data[i].nid,
-            isRead: data[i].isRead,
-            timeDiffSec: timeDiffSec,
-            timeDiffMin: timeDiffMin,
-            timeDiffHrs: timeDiffHrs
+        const store = {
+            id: notifications[i].id,
+            title: notifications[i].title,
+            type: notifications[i].type,
+            image: notifications[i].image,
+            nid: notifications[i].nid,
+            isRead: notifications[i].isRead,
+            postedAtSec: postedAtSec,
+            postedAtMin: postedAtMin,
+            postedAtHrs: postedAtHrs,
           }
-        })
-      }
+          data.push(store);
+      };
+      ctx.send({
+        data
+      })
     } catch (error) {
       ctx.send(error);
     }

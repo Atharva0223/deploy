@@ -139,14 +139,12 @@ module.exports = {
         .query("api::login-session.login-session")
         .findOne({ where: { users: exists.id } });
 
+      //issuing a JWT token to the id
+      const jwtToken = strapi.plugins["users-permissions"].services.jwt.issue({
+        id: exists.id,
+      });
       //if user exists then update or create the login-session collection type
       if (exists) {
-        //issuing a JWT token to the id
-        const jwtToken = strapi.plugins["users-permissions"].services.jwt.issue(
-          {
-            id: exists.id,
-          }
-        );
         // if user has already logged in
         if (login) {
           const update = await strapi
@@ -161,6 +159,19 @@ module.exports = {
                 status: 1,
               },
             });
+            console.log(update);
+            // resturn login successful
+          ctx.send({
+            data: {
+              message: "Login Successful",
+              code: 1,
+              jwt: jwtToken,
+              id: exists.id,
+              first_name: exists.first_name,
+              last_name: exists.last_name,
+              email: exists.email,
+            },
+          });
         }
         // if user is logging in for the first time
         else if (!login) {
@@ -179,12 +190,12 @@ module.exports = {
         ctx.send = {
           data: {
             message: "Login Successful",
-            code: 1,
-            jwt: jwtToken,
-            id: exists.id,
-            first_name: exists.first_name,
-            last_name: exists.last_name,
-            email: exists.email,
+              code: 1,
+              jwt: jwtToken,
+              id: exists.id,
+              first_name: exists.first_name,
+              last_name: exists.last_name,
+              email: exists.email,
           },
         };
       }
@@ -200,7 +211,7 @@ module.exports = {
     } catch (error) {
       ctx.send({
         data: {
-          message: error,
+          message: "error",
           code: 2,
         },
       });
