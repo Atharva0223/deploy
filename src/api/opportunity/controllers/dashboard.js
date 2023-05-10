@@ -52,9 +52,21 @@ module.exports = {
       opp.created_at DESC
     `;
 
+    const notifications = await strapi.query('api::store-notification.store-notification').findMany({
+      where: { isRead: false } });
+    var not;
+    if(notifications.length > 0) {
+      not = 1;
+    }
+    else if(notifications.length == 0){
+      not = 0;
+    }
+
+
       const data = await client.query(query);
       ctx.send({
         data: data.rows,
+        notification: not
       });
     } catch (error) {
       console.log(error);
@@ -110,8 +122,9 @@ module.exports = {
       ORDER BY
       opp.created_at DESC;
       `;
-
       const data = await client.query(query, [ctx.params.id]);
+
+
 
       ctx.send({
         data: data.rows,
