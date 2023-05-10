@@ -118,20 +118,17 @@ module.exports = {
 
   async verifyOTP(ctx) {
     try {
-      const { phone, email } = ctx.request.body;
-
-      //check if we have received email or phone
-      const where = {};
-      if (phone) {
-        where.phone = phone;
-      } else if (email) {
-        where.email = email;
-      }
+      const { phone, email, otp } = ctx.request.body;
 
       // check if the user exists for that email or phone number
       const exists = await strapi
         .query("plugin::users-permissions.user")
-        .findOne({ where });
+        .findOne({
+          where: {
+            $or: [{ phone }, { email }],
+            $and: [{ otp }],
+          },
+        });
 
       //check if login of that user exists
       const login = await strapi
@@ -158,7 +155,7 @@ module.exports = {
                 status: 1,
               },
             });
-            // resturn login successful
+          // resturn login successful
           ctx.send({
             data: {
               message: "Login Successful",
@@ -188,12 +185,12 @@ module.exports = {
         ctx.send = {
           data: {
             message: "Login Successful",
-              code: 1,
-              jwt: jwtToken,
-              id: exists.id,
-              first_name: exists.first_name,
-              last_name: exists.last_name,
-              email: exists.email,
+            code: 1,
+            jwt: jwtToken,
+            id: exists.id,
+            first_name: exists.first_name,
+            last_name: exists.last_name,
+            email: exists.email,
           },
         };
       }
@@ -209,7 +206,7 @@ module.exports = {
     } catch (error) {
       ctx.send({
         data: {
-          message: "error",
+          message: "Invalid OTP",
           code: 2,
         },
       });
