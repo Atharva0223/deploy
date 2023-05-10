@@ -29,7 +29,7 @@ module.exports = {
       LEFT JOIN opportunities_tags_links otl ON otl.opportunity_id = opp.id
       LEFT JOIN followings f ON f.organization = org.id
       WHERE
-      opp.id = $1 AND opp.is_deleted = false AND f.users = $2
+      opp.id = $1 AND opp.is_deleted = false
       GROUP BY
       opp.id,
       org.id,
@@ -43,23 +43,23 @@ module.exports = {
       //                                      opp.id          user.id
       const data = await client.query(query, [ctx.params.id1,ctx.params.id2]);
 
-      const getRating = await strapi.query('api::rating.rating').findOne({
-        where: {
-          opportunity: ctx.params.id1,
-          users: ctx.params.id2
-        }
-      })
+      // const getRating = await strapi.query('api::rating.rating').findOne({
+      //   where: {
+      //     opportunity: ctx.params.id1,
+      //     users: ctx.params.id2
+      //   }
+      // })
 
-      var rating;
-      if(getRating !== null){
-        rating = getRating.value;
-      } else if (getRating == null){
-        rating = 0
-      }
+      // var rating;
+      // if(getRating !== null){
+      //   rating = getRating.value;
+      // } else if (getRating == null){
+      //   rating = 0
+      // }
 
       ctx.send({
         data: data.rows,
-        rating: rating
+        // rating: rating
       });
     } catch (error) {
       console.log(error);
