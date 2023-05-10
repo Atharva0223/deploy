@@ -2,7 +2,7 @@ module.exports = {
     routes: [
       {
         method: "GET",
-        path: "/viewOrganization/:id",
+        path: "/viewOrganization/:oid/:uid",
         handler: "organization-controller.viewOrganization",
         config: {
           policies: [],

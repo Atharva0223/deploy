@@ -18,7 +18,6 @@ module.exports = {
     try {
       //get either the phone or email from the body
       const { phone, email } = ctx.request.body;
-      console.log("phone", phone, "email", email);
 
       // generate an otp here
       var val = Math.floor(1000 + Math.random() * 9000);

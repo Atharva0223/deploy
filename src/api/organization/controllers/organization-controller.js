@@ -2,12 +2,11 @@ module.exports = {
   //Get org detail
   async viewOrganization(ctx) {
     try {
-      id = ctx.params.id;
       const view = await strapi
         .query("api::organization.organization")
         .findOne({
           where: {
-            id,
+            id: ctx.params.oid,
           },
           populate: {
             logo: { select: "url" },
@@ -17,6 +16,21 @@ module.exports = {
             organization_users: true,
           },
         });
+
+        const follow = await strapi.query('api::following.following').findMany({
+          where: {
+            organization: ctx.params.oid,
+            users: ctx.params.uid
+          },
+        })
+
+        var following;
+        if(follow.length > 0){
+          following = true;
+        }
+        if(follow.length <= 0){ 
+          following = false;
+        }
 
       //check if the organization exists or not
       if (!view) {
@@ -57,6 +71,7 @@ module.exports = {
           logo: view.logo.url,
           opportunities: opp,
           organizations_users: org_users,
+          following: following
         });
       }
     } catch (error) {

@@ -89,6 +89,20 @@
     },
     "otp": {
       "type": "integer"
+    },
+    "profile_photo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "bio": {
+      "type": "text"
+    },
+    "about_me": {
+      "type": "richtext"
     }
   }
 }
