@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 module.exports = {
   async register(ctx) {
     try {
+      
       //Fetch first_name, last_name, phone, email from ctx.request.body
       const { first_name, last_name, phone, email } = ctx.request.body;
 
