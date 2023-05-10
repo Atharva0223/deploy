@@ -6,17 +6,6 @@ module.exports = {
     try {
       //Fetch first_name, last_name, phone, email from ctx.request.body
       const { first_name, last_name, phone, email } = ctx.request.body;
-      console.log(first_name, last_name, phone, email);
-
-      //check if any value is empty
-      if(!first_name || !last_name || !phone || !email){
-        ctx.send({
-          data:{
-            message: "All fields are required",
-            code: 2
-          }
-        })
-      }
 
       // check if the user exists with that email or phone number
       const exists = await strapi
@@ -47,10 +36,10 @@ module.exports = {
             data: {
               username: val,
               password: hashedPassword,
-              first_name,
-              last_name,
-              phone,
-              email,
+              first_name: first_name,
+              last_name: last_name,
+              phone: phone,
+              email: email,
               confirmed: true,
               role: 1,
             },

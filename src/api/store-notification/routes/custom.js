@@ -10,5 +10,14 @@ module.exports = {
           middleware: [],
         },
       },
+      {
+        method: "GET",
+        path: "/findNotifications",
+        handler: "custom.findNotifications",
+        config: {
+          policies: [],
+          middleware: [],
+        },
+      },
     ],
   };
