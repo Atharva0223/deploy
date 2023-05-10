@@ -1,9 +1,9 @@
 module.exports = {
     routes: [
       {
-        method: "DELETE",
-        path: "/delete",
-        handler: "organization-controller.delete",
+        method: "GET",
+        path: "/viewOrganization/:id",
+        handler: "organization-controller.viewOrganization",
         config: {
           policies: [],
           middleware: [],

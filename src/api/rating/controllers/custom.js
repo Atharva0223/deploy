@@ -56,7 +56,7 @@ module.exports = {
     }
     else if(!exists) {
       ctx.send({
-        message: "Rating not found"
+        value: 0
       })
     }
   },

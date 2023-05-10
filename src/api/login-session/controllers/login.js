@@ -159,7 +159,6 @@ module.exports = {
                 status: 1,
               },
             });
-            console.log(update);
             // resturn login successful
           ctx.send({
             data: {
