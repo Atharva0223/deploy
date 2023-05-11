@@ -1,39 +1,46 @@
-const { client } = require("../../../../config/pg");
-
 module.exports = {
   //Here the user will be able to seeall the applied opportunities
   async rating(ctx) {
     try {
       const { users, value, opportunity } = ctx.request.body.data;
 
-      const exists = await strapi.query("api::rating.rating").findOne({
-        where: { users, opportunity },
+      const rating = await strapi.query("api::rating.rating").findOne({
+        where: {
+          $and: [{ users }, { opportunity }],
+        },
       });
 
-      if (!exists) {
-        const add = await strapi.query("api::rating.rating").create({
-          data: {
-            users: users,
-            value: value,
-            opportunity: opportunity,
-          },
-        });
+      if (value > 5 || value < 0) {
+        console.log("value greater than 5");
         ctx.send({
-          message: "Rating added successfully",
+          message: "Please enter a value between 0 and 5",
+          code: 2,
         });
-      } else if (exists) {
-        const add = await strapi.query("api::rating.rating").update({
-          where: {
-            users: users,
-          },
-          data: {
-            value: value,
-            opportunity: opportunity,
-          },
-        });
-        ctx.send({
-          message: "Rating updated successfully",
-        });
+      } else {
+        if (rating) {
+          const update = await strapi.query("api::rating.rating").update({
+            where: {
+              $and: [{ users: users }, { opportunity: opportunity }],
+            },
+            data: {
+              value: value,
+            },
+          });
+          ctx.send({
+            message: "Rating updated successfully",
+          });
+        } else if (!rating) {
+          const create = await strapi.query("api::rating.rating").create({
+            data: {
+              users: users,
+              value: value,
+              opportunity: opportunity,
+            },
+          });
+          ctx.send({
+            message: "Rating added successfully",
+          });
+        }
       }
     } catch (error) {
       console.log(error);
@@ -49,15 +56,14 @@ module.exports = {
         opportunity: oid,
       },
     });
-    if(exists){
+    if (exists) {
       ctx.send({
         value: exists.value,
-      })
-    }
-    else if(!exists) {
+      });
+    } else if (!exists) {
       ctx.send({
-        value: 0
-      })
+        value: 0,
+      });
     }
   },
 };
