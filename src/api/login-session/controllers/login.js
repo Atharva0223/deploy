@@ -1,4 +1,4 @@
-const {sendSMS, sendEmail} = require("../../../otp-send");
+const { sendSMS, sendEmail } = require("../../../otp-send");
 
 module.exports = {
   async sendOTP(ctx) {
@@ -6,28 +6,36 @@ module.exports = {
       //get either the phone or email or both from the body
       const { phone, email } = ctx.request.body;
 
-      if(!phone && !email){
-        ctx.send({
-          message: "Please enter a phone number or email address",
-          code: 2
-        })
-      }
+      const user = await strapi
+        .query("plugin::users-permissions.user")
+        .findOne({
+          where: {
+            $or: [{ phone }, { email }],
+          },
+        });
+
       // generate an otp here
       var val = Math.floor(1000 + Math.random() * 9000);
 
-      //if email and phone are received
-      if (email && phone) {
-        //check if a user exists with that email AND phone
-        const exists = await strapi
-          .query("plugin::users-permissions.user")
-          .findOne({
-            where: {
-              $and: [{ phone }, { email }],
-            },
+      if (user) {
+        if (!phone && !email) {
+          ctx.send({
+            message: "Please enter a phone number or email address",
+            code: 2,
           });
-
+        }
+        //if email and phone are received
+        if (email && phone) {
+          //check if a user exists with that email AND phone
+          const exists = await strapi
+            .query("plugin::users-permissions.user")
+            .findOne({
+              where: {
+                $and: [{ phone }, { email }],
+              },
+            });
           //if exists then send otp to mail and phone
-          if(exists){
+          if (exists) {
             //call the service to send email and sms
             const smsResponse = await sendSMS(phone, val);
             const mailResponse = await sendEmail(email, val);
@@ -35,50 +43,53 @@ module.exports = {
               message: "OTP sent successfully",
               code: 1,
               mailResponse: mailResponse,
-              smsResponse: smsResponse
-            })
+              smsResponse: smsResponse,
+            });
           }
           //if not exists then send error with code 2
-          else if(!exists){
+          else if (!exists) {
             //send error saying user dosent exists
             ctx.send({
               message: "User dosent exists",
-              code: 2
-            })
+              code: 2,
+            });
           }
-      }
-      // if email or phone is received
-      else if (email || phone) {
-        const exists = await strapi
-          .query("plugin::users-permissions.user")
-          .findOne({
-            where: {
-              $or: [{ phone }, { email }],
-            },
-          });
-
-          if(phone){
+        }
+        // if email or phone is received
+        else if (email || phone) {
+          const exists = await strapi
+            .query("plugin::users-permissions.user")
+            .findOne({
+              where: {
+                $or: [{ phone }, { email }],
+              },
+            });
+          if (phone) {
             const smsResponse = await sendSMS(phone, val);
             ctx.send({
               message: "OTP sent successfully",
               code: 1,
-              smsResponse: smsResponse
-            })
-          }
-          else if(email){
+              smsResponse: smsResponse,
+            });
+          } else if (email) {
             const mailResponse = await sendEmail(email, val);
             ctx.send({
               message: "OTP sent successfully",
               code: 1,
-              mailResponse: mailResponse
-            })
-          }
-          else{
+              mailResponse: mailResponse,
+            });
+          } else {
             ctx.send({
               message: "An error occurred while sending otp",
-              code: 2
-            })
+              code: 2,
+            });
           }
+        }
+      } else if (!user) {
+        ctx.send({
+          message: "User does not exist",
+          code: 2,
+        });
       }
     } catch (error) {
       ctx.send({
