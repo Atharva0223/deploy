@@ -18,6 +18,15 @@ module.exports = {
       var val = Math.floor(1000 + Math.random() * 9000);
 
       if (user) {
+        //set otp for that user
+        const update = await strapi.query('plugin::users-permissions.user').update({
+          where:{
+            $or: [{ phone }, { email }],
+          },
+          data:{
+            otp: val
+          }
+        })
         if (!phone && !email) {
           ctx.send({
             message: "Please enter a phone number or email address",
