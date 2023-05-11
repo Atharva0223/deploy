@@ -1,187 +1,90 @@
-const sgMail = require("@sendgrid/mail");
-
-// fetch sendgrid credentials
-const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
-const SENDGRID_Email_Id = process.env.SENDGRID_Email_Id;
-
-//set API key for sendgrid
-sgMail.setApiKey(SENDGRID_API_KEY);
-
-// fetch twilio credentials
-
-const accountSid = process.env.accountSid;
-const authToken = process.env.authToken;
-const fromPhone = process.env.fromPhone;
+const {sendSMS, sendEmail} = require("../../../otp-send");
 
 module.exports = {
   async sendOTP(ctx) {
     try {
-      //get either the phone or email from the body
+      //get either the phone or email or both from the body
       const { phone, email } = ctx.request.body;
 
+      if(!phone && !email){
+        ctx.send({
+          message: "Please enter a phone number or email address",
+          code: 2
+        })
+      }
       // generate an otp here
       var val = Math.floor(1000 + Math.random() * 9000);
 
-      //check if we have received email or phone
-      const exists = await strapi
-        .query("plugin::users-permissions.user")
-        .findOne({
-          where: {
-            $or: [{ phone }, { email }],
-            $and: [{ otp }],
-          },
-        });
-
-      const registerUser = await strapi
-        .query("plugin::users-permissions.user")
-        .findOne({
-          where: {
-            $and: [{ otp }, { phone }, { email }],
-          },
-        });
-
-      if (registerUser) {
-        //add the otp to users collection type to that user
-        const setOTP = await strapi
+      //if email and phone are received
+      if (email && phone) {
+        //check if a user exists with that email AND phone
+        const exists = await strapi
           .query("plugin::users-permissions.user")
-          .update({
-            where,
-            data: {
-              otp: val,
+          .findOne({
+            where: {
+              $and: [{ phone }, { email }],
             },
           });
 
-        //send otp to email and sms
-        if (email && phone) {
-          //send the otp to that email
-          //mail body
-          const msg = {
-            to: email, // Change to your recipient
-            from: SENDGRID_Email_Id, // Change to your verified sender
-            subject: "VishwaMitra Login OTP",
-            text: `Here is you otp for login ${val}`,
-            // html: "<strong>and easy to do anywhere, even with Node.js</strong>",
-          };
-
-          //send mail
-          sgMail.send(msg).catch((error) => {
+          //if exists then send otp to mail and phone
+          if(exists){
+            console.log("inside if");
+            //call the service to send email and sms
+            // const smsResponse = await sendSMS(phone, val);
+            const mailResponse = await sendEmail(email, val);
             ctx.send({
-              data: {
-                error: error,
-                code: 2,
-              },
-            });
-          });
-
-          // Return message otp sent successfully
-          ctx.send({
-            data: {
-              message: "OTP sent to mail successfully",
-              code: 1,
-            },
-          });
-
-          //send the otp to tht phone number
-          const client = require("twilio")(accountSid, authToken);
-          client.messages.create({
-            body: `Hello, here is your otp ${val}`,
-            from: `${fromPhone}`,
-            to: `+91${ctx.request.body.phone}`,
-          });
-
-          // Return message otp sent successfully
-          ctx.send({
-            data: {
-              message: "OTP sent to sms sucessfully",
-              code: 1,
-            },
-          });
-        }
-      }
-      if(!registerUser) {
-        ctx.send({
-          data: {
-            message: "User not found",
-            code: 2,
-          },
-        });
-      }
-
-      // if the user exists then check if we have received the email or phone number and send otp for the same
-      if (exists) {
-        //add the otp to users collection type to that user
-        const setOTP = await strapi
-          .query("plugin::users-permissions.user")
-          .update({
-            where,
-            data: {
-              otp: val,
-            },
-          });
-
-        // if user exists and we have received the email then send otp on mail
-        if (email) {
-          //send the otp to that email
-          //mail body
-          const msg = {
-            to: email, // Change to your recipient
-            from: SENDGRID_Email_Id, // Change to your verified sender
-            subject: "VishwaMitra Login OTP",
-            text: `Here is you otp for login ${val}`,
-            // html: "<strong>and easy to do anywhere, even with Node.js</strong>",
-          };
-
-          //send mail
-          sgMail.send(msg).catch((error) => {
-            ctx.send({
-              data: {
-                error: error,
-                code: 2,
-              },
-            });
-          });
-
-          // Return message otp sent successfully
-          ctx.send({
-            data: {
               message: "OTP sent successfully",
               code: 1,
+              mailResponse: mailResponse,
+              // smsResponse: smsResponse
+            })
+          }
+          //if not exists then send error with code 2
+          else if(!exists){
+            //send error saying user dosent exists
+            ctx.send({
+              message: "User dosent exists",
+              code: 2
+            })
+          }
+      }
+      // if email or phone is received
+      else if (email || phone) {
+        const exists = await strapi
+          .query("plugin::users-permissions.user")
+          .findOne({
+            where: {
+              $or: [{ phone }, { email }],
             },
-          });
-        }
-        //------------------------------------------------------------------------------------------------------------------------
-        // if received phone
-        if (phone) {
-          //send the otp to tht phone number
-          const client = require("twilio")(accountSid, authToken);
-          client.messages.create({
-            body: `Hello, here is your otp ${val}`,
-            from: `${fromPhone}`,
-            to: `+91${ctx.request.body.phone}`,
           });
 
-          // Return message otp sent successfully
-          ctx.send({
-            data: {
-              message: "OTP sent sucessfully",
+          if(phone){
+            const smsResponse = await sendSMS(phone, val);
+            ctx.send({
+              message: "OTP sent successfully",
               code: 1,
-            },
-          });
-        }
-      }
-      // if user not found send error message user not found
-      else if (!exists) {
-        ctx.send({
-          data: {
-            message: "User not found",
-            code: 2,
-          },
-        });
+              smsResponse: smsResponse
+            })
+          }
+          else if(email){
+            const mailResponse = await sendEmail(email, val);
+            ctx.send({
+              message: "OTP sent successfully",
+              code: 1,
+              mailResponse: mailResponse
+            })
+          }
+          else{
+            ctx.send({
+              message: "An error occurred while sending otp",
+              code: 2
+            })
+          }
       }
     } catch (error) {
       ctx.send({
         data: {
-          message: error,
+          message: "An error occurred while sending otp",
           code: 2,
         },
       });
@@ -211,6 +114,7 @@ module.exports = {
       const jwtToken = strapi.plugins["users-permissions"].services.jwt.issue({
         id: exists.id,
       });
+
       //if user exists then update or create the login-session collection type
       if (exists) {
         // if user has already logged in
