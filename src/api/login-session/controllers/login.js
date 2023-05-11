@@ -28,15 +28,14 @@ module.exports = {
 
           //if exists then send otp to mail and phone
           if(exists){
-            console.log("inside if");
             //call the service to send email and sms
-            // const smsResponse = await sendSMS(phone, val);
+            const smsResponse = await sendSMS(phone, val);
             const mailResponse = await sendEmail(email, val);
             ctx.send({
               message: "OTP sent successfully",
               code: 1,
               mailResponse: mailResponse,
-              // smsResponse: smsResponse
+              smsResponse: smsResponse
             })
           }
           //if not exists then send error with code 2
