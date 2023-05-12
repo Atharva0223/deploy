@@ -1,6 +1,6 @@
 const { generateRandomString } = require("../../../random-password");
 const bcrypt = require("bcryptjs");
-const {sendSMS} = require("../../../otp-send");
+const {sendEmail} = require("../../../otp-send");
 
 module.exports = {
   async register(ctx) {
@@ -47,7 +47,7 @@ module.exports = {
             },
           });
 
-          await sendSMS(email,val)
+          await sendEmail(email,val)
         // send response to let the user know that they have been registered
         ctx.send({
           data: {
