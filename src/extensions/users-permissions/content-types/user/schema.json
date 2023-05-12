@@ -70,6 +70,7 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::share.share",
+      "private": true,
       "mappedBy": "user"
     },
     "first_name": {
@@ -85,10 +86,12 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::filter.filter",
+      "private": true,
       "mappedBy": "user"
     },
     "otp": {
-      "type": "integer"
+      "type": "integer",
+      "private": true
     },
     "profile_photo": {
       "type": "media",

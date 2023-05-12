@@ -9,6 +9,15 @@ module.exports = {
           middleware: []
         },
       },
+      {
+        method: "PUT",
+        path: "/editProfile/:id",
+        handler: "view-profile.editProfile",
+        config: {
+          policies: [],
+          middleware: []
+        },
+      },
     ],
   };
   

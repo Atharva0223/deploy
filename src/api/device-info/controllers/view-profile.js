@@ -13,9 +13,8 @@ module.exports = {
           },
         });
 
-        //if the user exists then send the profile details
+      //if the user exists then send the profile details
       if (exists) {
-
         //fetch save status of opportunities
         const saved_opportunities = await strapi
           .query("api::save.save")
@@ -69,13 +68,12 @@ module.exports = {
 
         //for loop to store the opportunities details in an array
         for (let i = 0; i < opp.length; i++) {
-
           //check saved status of all the opportunities the user has applied to
           const savedOpportunity = saved_opportunities.find(
             (o) => o.opportunity === opp[i].id
           );
 
-          //save the saved status of that opportunity in "saved" 
+          //save the saved status of that opportunity in "saved"
           const saved = savedOpportunity ? true : false;
           opp[i] = {
             ...opp[i],
@@ -145,8 +143,64 @@ module.exports = {
       else if (!exists) {
         ctx.send({
           message: "profile not found",
-          code: 2
+          code: 2,
         });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async editProfile(ctx) {
+    try {
+      const { data } = ctx.request.body;
+      const id = ctx.params.id;
+
+      const exists = await strapi
+        .query("plugin::users-permissions.user")
+        .findOne({
+          where: {
+            id: id,
+          },
+        });
+      if (exists) {
+        const update = await strapi
+          .query("plugin::users-permissions.user")
+          .update({
+            where: {
+              id: id,
+            },
+            data: {
+              first_name: data.hasOwnProperty("first_name")
+                ? data.first_name
+                : exists.first_name,
+              last_name: data.hasOwnProperty("last_name")
+                ? data.last_name
+                : exists.last_name,
+              email: data.hasOwnProperty("email") ? data.email : exists.email,
+              phone: data.hasOwnProperty("phone") ? data.phone : exists.phone,
+              bio: data.hasOwnProperty("bio") ? data.bio : exists.bio,
+              about_me: data.hasOwnProperty("about_me")
+                ? data.about_me
+                : exists.about_me,
+            },
+          });
+        ctx.send(
+          {
+            message: "User updated sucessfully",
+            code: 1,
+          },
+          200
+        );
+      }
+      if (!exists) {
+        ctx.send(
+          {
+            message: "Error: User not found",
+            code: 2,
+          },
+          404
+        );
       }
     } catch (error) {
       console.log(error);
