@@ -46,5 +46,14 @@ module.exports = {
           middleware: [],
         },
       },
+      {
+        method: "POST",
+        path: "/follow",
+        handler: "followers.follow",
+        config: {
+          policies: [],
+          middleware: [],
+        },
+      },
     ]
 };
