@@ -20,6 +20,7 @@ module.exports = {
 
       //auto generate a unique username and password
       var val = Math.floor(10000 + Math.random() * 90000);
+      var otp = Math.floor(1000 + Math.random() * 9000);
 
       //generate a password for the user using the random-password service
       const password = await generateRandomString(10);
@@ -44,10 +45,11 @@ module.exports = {
               email: email,
               confirmed: true,
               role: 1,
+              otp: otp
             },
           });
 
-          await sendEmail(email,val)
+          await sendEmail(email,otp)
         // send response to let the user know that they have been registered
         ctx.send({
           data: {

@@ -177,7 +177,7 @@ module.exports = {
             });
         }
         // Return the JWT token in the response body
-        ctx.send = {
+        ctx.send({
           data: {
             message: "Login Successful",
             code: 1,
@@ -187,13 +187,13 @@ module.exports = {
             last_name: exists.last_name,
             email: exists.email,
           },
-        };
+        });
       }
       //if not exists then send error message invalid otp
       else if (!exists) {
         ctx.send({
           data: {
-            message: "Invalid OTP",
+            message: "User not exists",
             code: 2,
           },
         });
