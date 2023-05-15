@@ -130,7 +130,9 @@ module.exports = {
         //sending the profile details as well as opportunitie details
         ctx.send({
           data: {
-            profile_photo: exists.profile_photo ? exists.profile_photo.url : null,
+            profile_photo: exists.profile_photo
+              ? exists.profile_photo.url
+              : null,
             first_name: exists.first_name,
             last_name: exists.last_name,
             bio: exists.bio,
@@ -141,18 +143,22 @@ module.exports = {
       }
       //if user dosent exist send message and code 2
       else if (!exists) {
-        ctx.send({
-          message: "profile not found",
-          code: 2,
-        },
-        404);
+        ctx.send(
+          {
+            message: "profile not found",
+            code: 2,
+          },
+          404
+        );
       }
     } catch (error) {
-      ctx.send({
-        message: "error: An error occurred while fetching profile",
-        code: 2
-      },
-      400)
+      ctx.send(
+        {
+          message: "error: An error occurred while fetching profile",
+          code: 2,
+        },
+        400
+      );
     }
   },
 
@@ -168,6 +174,7 @@ module.exports = {
             id: id,
           },
         });
+
       if (exists) {
         const update = await strapi
           .query("plugin::users-permissions.user")
@@ -182,8 +189,6 @@ module.exports = {
               last_name: data.hasOwnProperty("last_name")
                 ? data.last_name
                 : exists.last_name,
-              email: data.hasOwnProperty("email") ? data.email : exists.email,
-              phone: data.hasOwnProperty("phone") ? data.phone : exists.phone,
               bio: data.hasOwnProperty("bio") ? data.bio : exists.bio,
               about_me: data.hasOwnProperty("about_me")
                 ? data.about_me
