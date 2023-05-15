@@ -109,7 +109,7 @@ module.exports = {
           const arr = {
             saved: saved,
             opportunity_id: opp[i].id,
-            opportunity_image: opp[i].image.url,
+            opportunity_image: opp[i].image ? opp[i].image.url : null,
             opportunity_profile: opp[i].profile,
             opportunity_city: opp[i].city,
             opportunity_duration: duration,
@@ -130,7 +130,7 @@ module.exports = {
         //sending the profile details as well as opportunitie details
         ctx.send({
           data: {
-            profile_photo: exists.profile_photo.url,
+            profile_photo: exists.profile_photo ? exists.profile_photo.url : null,
             first_name: exists.first_name,
             last_name: exists.last_name,
             bio: exists.bio,
@@ -144,10 +144,15 @@ module.exports = {
         ctx.send({
           message: "profile not found",
           code: 2,
-        });
+        },
+        404);
       }
     } catch (error) {
-      console.log(error);
+      ctx.send({
+        message: "error: An error occurred while fetching profile",
+        code: 2
+      },
+      400)
     }
   },
 
