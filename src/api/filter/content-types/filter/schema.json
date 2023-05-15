@@ -12,23 +12,15 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "user": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "filters"
+    "models": {
+      "type": "enumeration",
+      "enum": [
+        "Opportunity",
+        "User"
+      ]
     },
-    "states": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::state.state",
-      "inversedBy": "filters"
-    },
-    "tags": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::tag.tag",
-      "inversedBy": "filters"
+    "name": {
+      "type": "string"
     }
   }
 }

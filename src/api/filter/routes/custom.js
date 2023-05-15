@@ -28,5 +28,14 @@ module.exports = {
         middleware: [],
       },
     },
+    {
+      method: "POST",
+      path: "/applytFilters/:id",
+      handler: "custom.applyFilters",
+      config: {
+        policies: [],
+        middleware: [],
+      },
+    },
   ],
 };

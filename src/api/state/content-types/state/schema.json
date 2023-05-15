@@ -20,12 +20,6 @@
       "relation": "manyToMany",
       "target": "api::opportunity.opportunity",
       "inversedBy": "states"
-    },
-    "filters": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::filter.filter",
-      "mappedBy": "states"
     }
   }
 }

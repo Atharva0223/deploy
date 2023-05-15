@@ -14,12 +14,6 @@
   "attributes": {
     "tag": {
       "type": "string"
-    },
-    "filters": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::filter.filter",
-      "mappedBy": "tags"
     }
   }
 }

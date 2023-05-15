@@ -82,13 +82,6 @@
     "phone": {
       "type": "string"
     },
-    "filters": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::filter.filter",
-      "private": true,
-      "mappedBy": "user"
-    },
     "otp": {
       "type": "integer",
       "private": true
