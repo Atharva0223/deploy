@@ -154,146 +154,166 @@ INSERT INTO followings (users,organization,created_at,updated_at) VALUES ($1,$2,
     }
   },
 
-  //follow
-  async follow(ctx) {
-    try {
-      const { users, people, organization } = ctx.request.body;
+//follow and un follow
+async follow(ctx) {
+  try {
+    const { users, people, organization } = ctx.request.body;
 
-      if(users == undefined){
-        ctx.send({
-          message: "Bad request: Users is missing",
-          code: 2
+    if(users == undefined){
+      ctx.send({
+        message: "Bad request: Users is missing",
+        code: 2
+      },
+      400
+      );
+      return;
+    }
+    if(users == people){
+      ctx.send({
+        message:"Bad request: User and follower cannot have the same id",
+        code: 2
+      },
+      409);
+      return;
+    }
+
+    // check if user exists
+    const userExists = await strapi
+      .query("plugin::users-permissions.user")
+      .findOne({
+        where: {
+          id: users,
         },
-        400
-        );
-        return;
-      }
+      });
 
-      // check if user exists
-      const userExists = await strapi
+    //if people is sent check if he exists if not send error not found
+    if (userExists && people) {
+      // Check if person exists
+      const peopleExists = await strapi
         .query("plugin::users-permissions.user")
-        .findOne({
-          where: {
-            id: users,
-          },
-        });
-
-        console.log(users==undefined);
-
-      //if people is sent check if he exists if not send error not found
-      if (userExists && people) {
-        // Check if person exists
-        const peopleExists = await strapi
-          .query("plugin::users-permissions.user")
-          .findOne({ where: { id: people } });
-        if (!peopleExists) {
-          ctx.send(
-            {
-              message: "Error: Follower not found",
-              code: 2,
-            },
-            404
-          );
-          return;
-        }
-        if (peopleExists) {
-          const exists = await strapi
-            .query("api::following.following")
-            .findOne({
-              where: {
-                users: users,
-                people: people,
-              },
-            });
-          if (exists) {
-            ctx.send(
-              {
-                message: "Already following this person",
-                code: 2,
-              }
-              // 409
-            );
-            return;
-          }
-          if (!exists) {
-            const insert = strapi.query("api::following.following").create({
-              data: {
-                users: users,
-                people: people,
-              },
-            });
-            ctx.send({
-              message: "Congratulations! you are now following this user",
-              code: 1
-            },
-            200
-            )
-          }
-        }
-      }
-
-      //if organization is sent check if it exists if not send error not found
-      if (userExists && organization) {
-        // // check if organization exists
-        const organizationExists = await strapi
-          .query("api::organization.organization")
-          .findOne({ where: { id: organization } });
-        if (!organizationExists) {
-          ctx.send(
-            {
-              message: "Error: Organization not found",
-              code: 2,
-            },
-            404
-          );
-          return;
-        }
-        if (organizationExists) {
-          const exists = await strapi
-            .query("api::following.following")
-            .findOne({
-              where: {
-                users: users,
-                organization: organization,
-              },
-            });
-          if (exists) {
-            ctx.send(
-              {
-                message: "Already following this organization",
-                code: 2,
-              }
-              // 409
-            );
-            return;
-          }
-          if (!exists) {
-            const insert = strapi.query("api::following.following").create({
-              data: {
-                users: users,
-                organization: organization,
-              },
-            });
-          }
-          ctx.send({
-            message: "Congratulations! You are following this organization",
-            code: 1
-          },
-          200)
-        }
-      } else if (!userExists) {
+        .findOne({ where: { id: people } });
+      if (!peopleExists) {
         ctx.send(
           {
-            message: "Error: User not found!",
+            message: "Error: Follower not found",
             code: 2,
           },
           404
         );
+        return;
       }
-    } catch (error) {
-      console.log(error);
+      if (peopleExists) {
+        const exists = await strapi
+          .query("api::following.following")
+          .findOne({
+            where: {
+              users: users,
+              people: people,
+            },
+          });
+        if (exists) {
+          //unfollow
+          const del = strapi.query('api::following.following').delete({
+            where: {
+              users: users,
+              people: people
+            }
+          })
+          ctx.send(
+            {
+              message: "unfollowed this person",
+              code: 1,
+            }
+            // 409
+          );
+          return;
+        }
+        if (!exists) {
+          const insert = strapi.query("api::following.following").create({
+            data: {
+              users: users,
+              people: people,
+            },
+          });
+          ctx.send({
+            message: "Congratulations! you are now following this user",
+            code: 1
+          },
+          200
+          )
+        }
+      }
     }
-  },
+
+    //if organization is sent check if it exists if not send error not found
+    if (userExists && organization) {
+      // // check if organization exists
+      const organizationExists = await strapi
+        .query("api::organization.organization")
+        .findOne({ where: { id: organization } });
+      if (!organizationExists) {
+        ctx.send(
+          {
+            message: "Error: Organization not found",
+            code: 2,
+          },
+          404
+        );
+        return;
+      }
+      if (organizationExists) {
+        const exists = await strapi
+          .query("api::following.following")
+          .findOne({
+            where: {
+              users: users,
+              organization: organization,
+            },
+          });
+        if (exists) {
+          //unfollow
+          const del = strapi.query('api::following.following').delete({
+            where: {
+              users: users,
+              organization: organization
+            }
+          })
+          ctx.send(
+            {
+              message: "unfollowed this organization",
+              code: 1,
+            }
+            // 409
+          );
+          return;
+        }
+        if (!exists) {
+          const insert = strapi.query("api::following.following").create({
+            data: {
+              users: users,
+              organization: organization,
+            },
+          });
+        }
+        ctx.send({
+          message: "Congratulations! You are following this organization",
+          code: 1
+        },
+        200)
+      }
+    } else if (!userExists) {
+      ctx.send(
+        {
+          message: "Error: User not found!",
+          code: 2,
+        },
+        404
+      );
+    }
+  } catch (error) {
+    console.log(error);
+  }
+},
 
   //unfollow a person
   async unfollowPerson(ctx) {

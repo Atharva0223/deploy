@@ -32,7 +32,7 @@ module.exports = {
             where: {
               user: ctx.params.id,
             },
-            select: ["opportunity", "status"],
+            select: ["opportunity", "status", "approved"],
           });
 
         //fetch opportunities
@@ -53,17 +53,6 @@ module.exports = {
           });
 
         //init an array to store
-        //opportunity_id: opp[i].id,
-        //opportunity_image: opp[i].image.url,
-        //opportunity_profile: opp[i].profile,
-        //opportunity_city: opp[i].city,
-        //opportunity_duration: duration,
-        //opportunity_rating: avgRating, // Add rating property to the object
-        //opportunity_status: status,
-        //organization_id: opp[i].organization.id,
-        //organization_name: opp[i].organization.name,
-        //organization_website: opp[i].organization.website,
-        //organization_logo_url: opp[i].organization.logo ? opp[i].organization.logo.url : null // Add the logo URL to the object
         var opportunities = [];
 
         //for loop to store the opportunities details in an array
@@ -101,9 +90,11 @@ module.exports = {
           const duration = `${yearsDiff} years, ${monthsDiff} months`;
 
           //fetching the status of each opportunity (waiting completed ongoing)
-          const status = opportunity_status.find(
+          const statusObj = opportunity_status.find(
             (o) => o.opportunity === opp[i].id
-          )?.status; // Find the status for the current opportunity
+          );
+          const status = statusObj ? statusObj.status : null;
+          const approved = statusObj ? statusObj.approved : null;
 
           // storing all of the above data in arr
           const arr = {
@@ -115,6 +106,7 @@ module.exports = {
             opportunity_duration: duration,
             opportunity_rating: avgRating, // Add rating property to the object
             opportunity_status: status,
+            opportunity_approved: approved, // Add the approved property to the object
             organization_id: opp[i].organization.id,
             organization_name: opp[i].organization.name,
             organization_website: opp[i].organization.website,
