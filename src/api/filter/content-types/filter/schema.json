@@ -12,15 +12,21 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "models": {
-      "type": "enumeration",
-      "enum": [
-        "Opportunity",
-        "User"
-      ]
+    "users": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "filters"
     },
-    "name": {
-      "type": "string"
+    "states": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::state.state"
+    },
+    "tags": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::tag.tag"
     }
   }
 }

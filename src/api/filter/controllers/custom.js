@@ -139,8 +139,6 @@ module.exports = {
         return;
       }
 
-      console.log(id);
-
       var statesIDs = [];
       var tagsIDs = [];
 
@@ -171,6 +169,34 @@ module.exports = {
           }
         }
       }
+
+      const filterExists = await strapi.query("api::filter.filter").findOne({
+        where: {
+          users: id
+        }
+      })
+
+      if(filterExists){
+        const update = await strapi.query("api::filter.filter").update({
+          where:{
+            users: id
+          },
+          data:{
+            states: statesIDs,
+            tags: tagsIDs
+          }
+        });
+      } else if(!filterExists){
+        const insert = await strapi.query("api::filter.filter").create({
+          data:{
+            users: id,
+            states: statesIDs,
+            tags: tagsIDs
+          }
+        });
+      }
+
+      
 
       const opp = await strapi.query("api::opportunity.opportunity").findMany({
         where: {

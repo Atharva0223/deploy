@@ -49,7 +49,7 @@ module.exports = {
             },
           });
 
-          await sendEmail(email,otp)
+          const mailResponse = await sendEmail(email,otp)
         // send response to let the user know that they have been registered
         ctx.send({
           data: {
@@ -59,6 +59,7 @@ module.exports = {
             last_name: insert.last_name,
             phone: insert.phone,
             email: insert.email,
+            mailResponse: mailResponse
           },
         });
       }
